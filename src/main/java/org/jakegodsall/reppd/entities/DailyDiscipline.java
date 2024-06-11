@@ -1,7 +1,7 @@
-package entities;
+package org.jakegodsall.reppd.entities;
 
-import entities.enums.DisciplineType;
-import entities.enums.Frequency;
+import org.jakegodsall.reppd.entities.enums.DisciplineType;
+import org.jakegodsall.reppd.entities.enums.Frequency;
 import jakarta.persistence.Entity;
 import lombok.*;
 

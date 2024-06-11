@@ -1,6 +1,6 @@
-package entities;
+package org.jakegodsall.reppd.entities;
 
-import entities.enums.Status;
+import org.jakegodsall.reppd.entities.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 

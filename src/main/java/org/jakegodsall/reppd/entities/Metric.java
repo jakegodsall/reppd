@@ -1,4 +1,4 @@
-package entities;
+package org.jakegodsall.reppd.entities;
 
 import jakarta.persistence.Entity;
 import lombok.*;
