@@ -14,5 +14,5 @@ public class BaseEntity {
     @Version
     private Integer version;
     private LocalDateTime createdDate;
-    private LocalDateTime lastUpdatedDate;
+    private LocalDateTime lastModifiedDate;
 }

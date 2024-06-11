@@ -1,7 +1,6 @@
 package org.jakegodsall.reppd.services;
 
-import org.jakegodsall.reppd.GoalDto;
-import org.springframework.stereotype.Service;
+import org.jakegodsall.reppd.dtos.GoalDto;
 
 import java.util.List;
 import java.util.Optional;

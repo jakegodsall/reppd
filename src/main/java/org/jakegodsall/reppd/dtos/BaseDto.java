@@ -1,4 +1,4 @@
-package org.jakegodsall.reppd;
+package org.jakegodsall.reppd.dtos;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -1,7 +1,7 @@
 package org.jakegodsall.reppd.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.jakegodsall.reppd.GoalDto;
+import org.jakegodsall.reppd.dtos.GoalDto;
 import org.jakegodsall.reppd.services.GoalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

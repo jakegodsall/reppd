@@ -1,4 +1,4 @@
-package org.jakegodsall.reppd;
+package org.jakegodsall.reppd.dtos;
 
 import org.jakegodsall.reppd.entities.enums.Status;
 
