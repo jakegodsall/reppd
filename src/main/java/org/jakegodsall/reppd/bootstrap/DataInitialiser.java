@@ -24,8 +24,8 @@ public class DataInitialiser implements CommandLineRunner {
     private void createAndPersistGoals() {
         if (goalRepository.count() == 0) {
             Goal goal1 = Goal.builder()
-                    .title("Achieve B2 in Polish")
-                    .description("Achieve B2 in Polish")
+                    .title("Get a promotion")
+                    .description("Get a promotion")
                     .status(Status.ACTIVE)
                     .startDate(LocalDateTime.now())
                     .smartDetail("Smart Detail")
