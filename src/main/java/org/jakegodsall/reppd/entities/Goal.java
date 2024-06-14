@@ -1,5 +1,6 @@
 package org.jakegodsall.reppd.entities;
 
+import lombok.experimental.SuperBuilder;
 import org.jakegodsall.reppd.entities.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,10 +13,11 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Builder
+@SuperBuilder
 @Entity
 public class Goal extends BaseEntity {
     private String title;
+    private String description;
     private Status status;
 
     private LocalDateTime startDate;

@@ -1,5 +1,6 @@
 package org.jakegodsall.reppd.entities;
 
+import lombok.experimental.SuperBuilder;
 import org.jakegodsall.reppd.entities.enums.DisciplineType;
 import org.jakegodsall.reppd.entities.enums.Frequency;
 import jakarta.persistence.Entity;
@@ -10,7 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 @Entity
 public class DailyDiscipline extends BaseEntity {
     private String title;

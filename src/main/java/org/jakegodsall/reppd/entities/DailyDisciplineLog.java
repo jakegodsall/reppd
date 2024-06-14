@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.entities;
 
 import jakarta.persistence.Entity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Builder
+@SuperBuilder
 @Entity
 public class DailyDisciplineLog extends BaseEntity {
 

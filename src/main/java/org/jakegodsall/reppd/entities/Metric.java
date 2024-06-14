@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.entities;
 
 import jakarta.persistence.Entity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -9,7 +10,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Builder
+@SuperBuilder
 @Entity
 public class Metric extends BaseEntity {
     private String name;

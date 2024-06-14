@@ -13,8 +13,8 @@ import java.util.UUID;
 @RestController
 public class GoalController {
 
-    private final String API_V1_GOAL = "/api/v1/goal";
-    private final String API_V1_GOAL_DETAIL = API_V1_GOAL + "/{goalId}";
+    public static final String API_V1_GOAL = "/api/v1/goal";
+    public static final String API_V1_GOAL_DETAIL = API_V1_GOAL + "/{goalId}";
 
     private final GoalService goalService;
 
