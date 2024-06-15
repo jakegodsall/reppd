@@ -36,11 +36,6 @@ class GoalControllerTest {
     @MockBean
     GoalService goalService;
 
-    @Autowired
-    GoalRepository goalRepository;
-    @Autowired
-    GoalMapper goalMapper;
-
     @Test
     void testGetAllGoals() throws Exception {
         List<GoalDto> goalDtoList = new ArrayList<>(List.of(
@@ -61,10 +56,14 @@ class GoalControllerTest {
     void testCreateGoal() throws Exception {
         GoalDto goalDto = createValidGoalDto();
         goalDto.setId(null);
+        goalDto.setVersion(0);
+
+        given(goalService.createGoal(any(GoalDto.class))).willReturn(goalDto);
 
         mockMvc.perform(post(GoalController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(goalDto)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
@@ -78,7 +77,7 @@ class GoalControllerTest {
         mockMvc.perform(get(GoalController.API_V1_GOAL_DETAIL, goalDto.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(goalDto.getId()));
+                .andExpect(jsonPath("$.id").value(goalDto.getId().toString()));
     }
 
     @Test
@@ -95,7 +94,7 @@ class GoalControllerTest {
         GoalDto originalGoalDto = createValidGoalDto();
 
         GoalDto updatedGoalDto = createValidGoalDto();
-        updatedGoalDto.setId(null);
+        updatedGoalDto.setId(originalGoalDto.getId());
         updatedGoalDto.setTitle("New Goal");
 
         given(goalService.updateGoalById(any(UUID.class), any(GoalDto.class))).willReturn(Optional.of(updatedGoalDto));
@@ -105,7 +104,7 @@ class GoalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedGoalDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(originalGoalDto.getId()))
+                .andExpect(jsonPath("$.id").value(originalGoalDto.getId().toString()))
                 .andExpect(jsonPath("$.title").value(updatedGoalDto.getTitle()));
     }
 
@@ -131,14 +130,17 @@ class GoalControllerTest {
         Map<String, Object> goalMap = new HashMap<>();
         goalMap.put("title", "New Goal");
 
-        given(goalService.updateGoalPatchById(any(UUID.class), any(GoalDto.class))).willReturn(Optional.of(originalGoalDto));
+        GoalDto updatedGoalDto = originalGoalDto;
+        updatedGoalDto.setTitle("New Goal");
+
+        given(goalService.updateGoalPatchById(any(UUID.class), any(GoalDto.class))).willReturn(Optional.of(updatedGoalDto));
 
         mockMvc.perform(patch(GoalController.API_V1_GOAL_DETAIL, originalGoalDto.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(goalMap)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(originalGoalDto.getId()))
+                .andExpect(jsonPath("$.id").value(originalGoalDto.getId().toString()))
                 .andExpect(jsonPath("$.title").value(goalMap.get("title")));
     }
 
