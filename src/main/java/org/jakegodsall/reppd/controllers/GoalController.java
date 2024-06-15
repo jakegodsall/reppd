@@ -2,10 +2,12 @@ package org.jakegodsall.reppd.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.GoalDto;
+import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.GoalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 

@@ -1,10 +1,14 @@
 package org.jakegodsall.reppd.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.jakegodsall.reppd.entities.enums.Status;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @SuperBuilder
 public class GoalDto extends BaseDto {
 

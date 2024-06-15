@@ -12,5 +12,5 @@ public interface GoalService {
     Optional<GoalDto> getGoalById(UUID id);
     Optional<GoalDto> updateGoalById(UUID id, GoalDto goalDto);
     Optional<GoalDto> updateGoalPatchById(UUID id, GoalDto goalDto);
-    void deleteGoalById(UUID id);
+    boolean deleteGoalById(UUID id);
 }

@@ -43,7 +43,7 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public void deleteGoalById(UUID id) {
-
+    public boolean deleteGoalById(UUID id) {
+        return true;
     }
 }
