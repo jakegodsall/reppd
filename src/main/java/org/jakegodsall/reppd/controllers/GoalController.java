@@ -3,13 +3,11 @@ package org.jakegodsall.reppd.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.GoalDto;
-import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.GoalService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +57,7 @@ public class GoalController {
     @PatchMapping(API_V1_GOAL_DETAIL)
     public ResponseEntity<GoalDto> updateGoalPatchById(
             @PathVariable("goalId") UUID goalId,
-            @Valid @RequestBody GoalDto goalDto
+            @RequestBody GoalDto goalDto
     ) {
         GoalDto updatedGoalDto = goalService.updateGoalPatchById(goalId, goalDto)
                 .orElseThrow(NotFoundException::new);
