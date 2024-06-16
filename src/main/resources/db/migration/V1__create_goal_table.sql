@@ -7,7 +7,7 @@ CREATE TABLE goal (
     last_modified_date TIMESTAMP,
     title VARCHAR(255) NOT NULL,
     description VARCHAR(1000),
-    status VARCHAR(100) NOT NULL,
+    status TINYINT,
     start_date TIMESTAMP,
     end_date TIMESTAMP,
     smart_detail VARCHAR(1000),

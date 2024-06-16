@@ -24,7 +24,7 @@ public class ExceptionController {
         List<Map<String, String>> fieldErrors = exception.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> {
                     Map<String, String> errorMap = new HashMap<>();
-                    errorMap.put(fieldError.toString(), fieldError.getDefaultMessage());
+                    errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
                     return errorMap;
                 }).toList();
 

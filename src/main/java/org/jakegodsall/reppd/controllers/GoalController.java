@@ -1,5 +1,6 @@
 package org.jakegodsall.reppd.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.GoalDto;
 import org.jakegodsall.reppd.entities.enums.Status;
@@ -8,9 +9,9 @@ import org.jakegodsall.reppd.services.GoalService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +31,9 @@ public class GoalController {
     }
 
     @PostMapping(API_V1_GOAL)
-    public ResponseEntity<GoalDto> createGoal(@RequestBody GoalDto goalDto) {
+    public ResponseEntity<GoalDto> createGoal(
+            @Valid @RequestBody GoalDto goalDto
+    ) {
         GoalDto createdGoalDto = goalService.createGoal(goalDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", API_V1_GOAL + createdGoalDto.getId());
@@ -46,7 +49,7 @@ public class GoalController {
     @PutMapping(API_V1_GOAL_DETAIL)
     public ResponseEntity<GoalDto> updateGoalById(
             @PathVariable("goalId") UUID goalId,
-            @RequestBody GoalDto goalDto
+            @Valid @RequestBody GoalDto goalDto
     ) {
         GoalDto updatedGoalDto = goalService.updateGoalById(goalId, goalDto)
                 .orElseThrow(NotFoundException::new);
@@ -56,7 +59,7 @@ public class GoalController {
     @PatchMapping(API_V1_GOAL_DETAIL)
     public ResponseEntity<GoalDto> updateGoalPatchById(
             @PathVariable("goalId") UUID goalId,
-            @RequestBody GoalDto goalDto
+            @Valid @RequestBody GoalDto goalDto
     ) {
         GoalDto updatedGoalDto = goalService.updateGoalPatchById(goalId, goalDto)
                 .orElseThrow(NotFoundException::new);

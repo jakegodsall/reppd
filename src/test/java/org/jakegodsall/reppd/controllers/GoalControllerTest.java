@@ -216,18 +216,22 @@ class GoalControllerTest {
         Map<String, Object> goalMap = new HashMap<>();
         goalMap.put("title", "New Goal");
 
-        GoalDto updatedGoalDto = originalGoalDto;
+        GoalDto updatedGoalDto = createValidGoalDto();
+        updatedGoalDto.setId(originalGoalDto.getId());
         updatedGoalDto.setTitle("New Goal");
 
         given(goalService.updateGoalPatchById(any(UUID.class), any(GoalDto.class))).willReturn(Optional.of(updatedGoalDto));
 
-        mockMvc.perform(patch(GoalController.API_V1_GOAL_DETAIL, originalGoalDto.getId())
+        MvcResult result = mockMvc.perform(patch(GoalController.API_V1_GOAL_DETAIL, originalGoalDto.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(goalMap)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(originalGoalDto.getId().toString()))
-                .andExpect(jsonPath("$.title").value(goalMap.get("title")));
+                .andExpect(jsonPath("$.title").value(goalMap.get("title")))
+                .andReturn();
+
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
