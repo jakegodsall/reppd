@@ -10,5 +10,7 @@ CREATE TABLE competency
     description        VARCHAR(1000) DEFAULT NULL,
     status             TINYINT,
     start_date         TIMESTAMP     DEFAULT NULL,
-    end_date           TIMESTAMP     DEFAULT NULL
+    end_date           TIMESTAMP     DEFAULT NULL,
+
+    PRIMARY KEY (id)
 ) ENGINE = InnoDB;

@@ -15,11 +15,26 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@SuperBuilder
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "discipline_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class DailyDiscipline extends BaseEntity {
+
+    public DailyDiscipline(
+            BaseEntityBuilder<?, ?> b,
+            String title,
+            String description,
+            LogDetails logDetails,
+            Competency competency,
+            Set<DailyLog> dailyLogs
+    ) {
+        super(b);
+        this.title = title;
+        this.description = description;
+        this.logDetails = logDetails;
+        this.setCompetency(competency);
+        this.dailyLogs = dailyLogs;
+    }
 
     private String title;
     private String description;
@@ -34,4 +49,9 @@ public abstract class DailyDiscipline extends BaseEntity {
 
     @OneToMany(mappedBy = "dailyDiscipline", cascade = CascadeType.ALL)
     private Set<DailyLog> dailyLogs;
+
+    public void setCompetency(Competency competency) {
+        this.competency = competency;
+        competency.getDailyDisciplines().add(this);
+    }
 }

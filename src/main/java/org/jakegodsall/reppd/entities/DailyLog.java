@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @SuperBuilder
 @Entity
 public class DailyLog extends BaseEntity {

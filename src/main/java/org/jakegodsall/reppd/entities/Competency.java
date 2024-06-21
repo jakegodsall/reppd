@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -39,6 +40,6 @@ public class Competency extends BaseEntity {
 
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "competency")
-    private Set<DailyDiscipline> dailyDisciplines;
+    @OneToMany(mappedBy = "competency", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<DailyDiscipline> dailyDisciplines = new HashSet<>();
 }

@@ -11,7 +11,7 @@ CREATE TABLE daily_log (
     time_in_minutes_value BIGINT DEFAULT NULL,
     boolean_value BOOLEAN DEFAULT NULL,
 
-    daily_discipline_id VARCHAR(36) NOT NULL,
+    daily_discipline_id VARCHAR(36) DEFAULT NULL,
 
     PRIMARY KEY (id),
     CONSTRAINT FOREIGN KEY (daily_discipline_id) REFERENCES daily_discipline(id)
