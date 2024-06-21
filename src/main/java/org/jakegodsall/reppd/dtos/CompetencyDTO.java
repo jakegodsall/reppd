@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class GoalDto extends BaseDto {
+public class CompetencyDTO extends BaseDto {
 
     @NotBlank
     @NotNull
@@ -33,15 +33,5 @@ public class GoalDto extends BaseDto {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
-
-    private String smartDetail;
-
-    private String measurableDetail;
-
-    private String achievableDetail;
-
-    private String relevantDetail;
-
-    private String timeboundDetail;
 
 }

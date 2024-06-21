@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @SuperBuilder
 @Entity
-public class Goal extends BaseEntity {
+public class Competency extends BaseEntity {
 
     @NotBlank
     @NotNull
@@ -36,15 +36,5 @@ public class Goal extends BaseEntity {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
-
-    private String smartDetail;
-
-    private String measurableDetail;
-
-    private String achievableDetail;
-
-    private String relevantDetail;
-
-    private String timeboundDetail;
 
 }

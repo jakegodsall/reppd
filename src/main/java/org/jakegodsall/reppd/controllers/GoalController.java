@@ -2,9 +2,9 @@ package org.jakegodsall.reppd.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.jakegodsall.reppd.dtos.GoalDto;
+import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
-import org.jakegodsall.reppd.services.GoalService;
+import org.jakegodsall.reppd.services.CompetencyService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,53 +20,53 @@ public class GoalController {
     public static final String API_V1_GOAL = "/api/v1/goal";
     public static final String API_V1_GOAL_DETAIL = API_V1_GOAL + "/{goalId}";
 
-    private final GoalService goalService;
+    private final CompetencyService competencyService;
 
     @GetMapping(API_V1_GOAL)
-    public ResponseEntity<List<GoalDto>> getAllGoals() {
-        List<GoalDto> goals = goalService.getAllGoals();
+    public ResponseEntity<List<CompetencyDTO>> getAllGoals() {
+        List<CompetencyDTO> goals = competencyService.getAllGoals();
         return ResponseEntity.ok(goals);
     }
 
     @PostMapping(API_V1_GOAL)
-    public ResponseEntity<GoalDto> createGoal(
-            @Valid @RequestBody GoalDto goalDto
+    public ResponseEntity<CompetencyDTO> createGoal(
+            @Valid @RequestBody CompetencyDTO competencyDTO
     ) {
-        GoalDto createdGoalDto = goalService.createGoal(goalDto);
+        CompetencyDTO createdCompetencyDTO = competencyService.createGoal(competencyDTO);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", API_V1_GOAL + createdGoalDto.getId());
+        headers.add("Location", API_V1_GOAL + createdCompetencyDTO.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(API_V1_GOAL_DETAIL)
-    public ResponseEntity<GoalDto> getGoalById(@PathVariable("goalId") UUID goalId) {
-        GoalDto goalDto = goalService.getGoalById(goalId).orElseThrow(NotFoundException::new);
-        return ResponseEntity.ok(goalDto);
+    public ResponseEntity<CompetencyDTO> getGoalById(@PathVariable("goalId") UUID goalId) {
+        CompetencyDTO competencyDTO = competencyService.getGoalById(goalId).orElseThrow(NotFoundException::new);
+        return ResponseEntity.ok(competencyDTO);
     }
 
     @PutMapping(API_V1_GOAL_DETAIL)
-    public ResponseEntity<GoalDto> updateGoalById(
+    public ResponseEntity<CompetencyDTO> updateGoalById(
             @PathVariable("goalId") UUID goalId,
-            @Valid @RequestBody GoalDto goalDto
+            @Valid @RequestBody CompetencyDTO competencyDTO
     ) {
-        GoalDto updatedGoalDto = goalService.updateGoalById(goalId, goalDto)
+        CompetencyDTO updatedCompetencyDTO = competencyService.updateGoalById(goalId, competencyDTO)
                 .orElseThrow(NotFoundException::new);
-        return ResponseEntity.ok(updatedGoalDto);
+        return ResponseEntity.ok(updatedCompetencyDTO);
     }
 
     @PatchMapping(API_V1_GOAL_DETAIL)
-    public ResponseEntity<GoalDto> updateGoalPatchById(
+    public ResponseEntity<CompetencyDTO> updateGoalPatchById(
             @PathVariable("goalId") UUID goalId,
-            @RequestBody GoalDto goalDto
+            @RequestBody CompetencyDTO competencyDTO
     ) {
-        GoalDto updatedGoalDto = goalService.updateGoalPatchById(goalId, goalDto)
+        CompetencyDTO updatedCompetencyDTO = competencyService.updateGoalPatchById(goalId, competencyDTO)
                 .orElseThrow(NotFoundException::new);
-        return ResponseEntity.ok(updatedGoalDto);
+        return ResponseEntity.ok(updatedCompetencyDTO);
     }
 
     @DeleteMapping(API_V1_GOAL_DETAIL)
     public ResponseEntity<Void> deleteGoalById(@PathVariable("goalId") UUID goalId) {
-        if (!goalService.deleteGoalById(goalId)) {
+        if (!competencyService.deleteGoalById(goalId)) {
             throw new NotFoundException();
         }
         return ResponseEntity.noContent().build();

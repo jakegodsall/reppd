@@ -1,9 +1,9 @@
 package org.jakegodsall.reppd.bootstrap;
 
 import lombok.RequiredArgsConstructor;
-import org.jakegodsall.reppd.entities.Goal;
+import org.jakegodsall.reppd.entities.Competency;
 import org.jakegodsall.reppd.entities.enums.Status;
-import org.jakegodsall.reppd.repositories.GoalRepository;
+import org.jakegodsall.reppd.repositories.CompetencyRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class DataInitialiser implements CommandLineRunner {
 
-    private final GoalRepository goalRepository;
+    private final CompetencyRepository competencyRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -22,50 +22,35 @@ public class DataInitialiser implements CommandLineRunner {
     }
 
     private void createAndPersistGoals() {
-        if (goalRepository.count() == 0) {
-            Goal goal1 = Goal.builder()
-                    .title("Get a promotion")
-                    .description("Get a promotion")
+        if (competencyRepository.count() == 0) {
+            Competency goal1 = Competency.builder()
+                    .title("Python Programming")
+                    .description("Building web applications with Python.")
                     .status(Status.ACTIVE)
                     .startDate(LocalDateTime.now())
-                    .smartDetail("Smart Detail")
-                    .measurableDetail("Measurable Detail")
-                    .achievableDetail("Achievable Detail")
-                    .relevantDetail("Relevant Detail")
-                    .timeboundDetail("Timebound Detail")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
-            Goal goal2 = Goal.builder()
-                    .title("Get a job as a Java developer")
-                    .description("Get a job as a Java developer")
+            Competency goal2 = Competency.builder()
+                    .title("Running")
+                    .description(null)
                     .status(Status.ACTIVE)
                     .startDate(LocalDateTime.now())
-                    .smartDetail("Smart Detail")
-                    .measurableDetail("Measurable Detail")
-                    .achievableDetail("Achievable Detail")
-                    .relevantDetail("Relevant Detail")
-                    .timeboundDetail("Timebound Detail")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
-            Goal goal3 = Goal.builder()
-                    .title("Run a marathon")
-                    .description("Run a marathon")
+            Competency goal3 = Competency.builder()
+                    .title("Relationship")
+                    .description("Everything towards building the best relationship.")
                     .status(Status.ACTIVE)
                     .startDate(LocalDateTime.now())
-                    .smartDetail("Smart Detail")
-                    .measurableDetail("Measurable Detail")
-                    .achievableDetail("Achievable Detail")
-                    .relevantDetail("Relevant Detail")
-                    .timeboundDetail("Timebound Detail")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
-            goalRepository.saveAll(List.of(goal1, goal2, goal3));
+            competencyRepository.saveAll(List.of(goal1, goal2, goal3));
         }
     }
 }
