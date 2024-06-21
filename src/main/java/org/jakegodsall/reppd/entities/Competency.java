@@ -4,11 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.experimental.SuperBuilder;
+import org.jakegodsall.reppd.entities.dailydiscipline.DailyDiscipline;
 import org.jakegodsall.reppd.entities.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,4 +39,6 @@ public class Competency extends BaseEntity {
 
     private LocalDateTime endDate;
 
+    @OneToMany(mappedBy = "competency")
+    private Set<DailyDiscipline> dailyDisciplines;
 }
