@@ -6,7 +6,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.jakegodsall.reppd.entities.dailydiscipline.DailyDiscipline;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +24,5 @@ public class DailyLog extends BaseEntity {
     @JoinColumn(name = "daily_discipline_id")
     private DailyDiscipline dailyDiscipline;
 
-    @Embedded
-    private LogDetails logDetails;
-
+    private Long value;
 }

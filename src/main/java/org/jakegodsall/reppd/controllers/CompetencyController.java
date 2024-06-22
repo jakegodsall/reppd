@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-public class GoalController {
+public class CompetencyController {
 
     public static final String API_V1_GOAL = "/api/v1/goal";
     public static final String API_V1_GOAL_DETAIL = API_V1_GOAL + "/{goalId}";

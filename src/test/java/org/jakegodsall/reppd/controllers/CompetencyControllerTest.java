@@ -40,7 +40,7 @@ class CompetencyControllerTest {
 
         given(competencyService.getAllGoals()).willReturn(competencyDTOList);
 
-        mockMvc.perform(get(GoalController.API_V1_GOAL)
+        mockMvc.perform(get(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -55,7 +55,7 @@ class CompetencyControllerTest {
 
         given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        mockMvc.perform(post(GoalController.API_V1_GOAL)
+        mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -70,7 +70,7 @@ class CompetencyControllerTest {
 
         given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(GoalController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -87,7 +87,7 @@ class CompetencyControllerTest {
 
         given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(GoalController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -104,7 +104,7 @@ class CompetencyControllerTest {
 
         given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(GoalController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -121,7 +121,7 @@ class CompetencyControllerTest {
 
         given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(GoalController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -138,7 +138,7 @@ class CompetencyControllerTest {
 
         given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(GoalController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -154,7 +154,7 @@ class CompetencyControllerTest {
 
         given(competencyService.getGoalById(any(UUID.class))).willReturn(Optional.of(competencyDTO));
 
-        mockMvc.perform(get(GoalController.API_V1_GOAL_DETAIL, competencyDTO.getId())
+        mockMvc.perform(get(CompetencyController.API_V1_GOAL_DETAIL, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(competencyDTO.getId().toString()));
@@ -164,7 +164,7 @@ class CompetencyControllerTest {
     void getCompetencyById_notFound() throws Exception {
         given(competencyService.getGoalById(any(UUID.class))).willReturn(Optional.empty());
 
-        mockMvc.perform(get(GoalController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(get(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -179,7 +179,7 @@ class CompetencyControllerTest {
 
         given(competencyService.updateGoalById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
 
-        mockMvc.perform(put(GoalController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
+        mockMvc.perform(put(CompetencyController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedCompetencyDTO)))
@@ -196,7 +196,7 @@ class CompetencyControllerTest {
 
         given(competencyService.updateGoalById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
 
-        mockMvc.perform(put(GoalController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(put(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedCompetencyDTO)))
@@ -216,7 +216,7 @@ class CompetencyControllerTest {
 
         given(competencyService.updateGoalPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
 
-        MvcResult result = mockMvc.perform(patch(GoalController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
+        MvcResult result = mockMvc.perform(patch(CompetencyController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(goalMap)))
@@ -235,7 +235,7 @@ class CompetencyControllerTest {
         Map<String, Object> goalMap = new HashMap<>();
         goalMap.put("title", "New Goal");
 
-        mockMvc.perform(patch(GoalController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(patch(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(goalMap)))
@@ -248,7 +248,7 @@ class CompetencyControllerTest {
 
         given(competencyService.deleteGoalById(any(UUID.class))).willReturn(true);
 
-        mockMvc.perform(delete(GoalController.API_V1_GOAL_DETAIL, competencyDTO.getId())
+        mockMvc.perform(delete(CompetencyController.API_V1_GOAL_DETAIL, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
@@ -257,7 +257,7 @@ class CompetencyControllerTest {
     void deleteCompetencyById_notFound() throws Exception{
         given(competencyService.deleteGoalById(any(UUID.class))).willReturn(false);
 
-        mockMvc.perform(delete(GoalController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(delete(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
