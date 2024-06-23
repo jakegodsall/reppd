@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
+import org.jakegodsall.reppd.entities.DailyDiscipline;
 import org.jakegodsall.reppd.repositories.CompetencyRepository;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.springframework.stereotype.Service;
@@ -45,4 +46,11 @@ public class CompetencyServiceImpl implements CompetencyService {
     public boolean deleteCompetencyById(UUID id) {
         return false;
     }
+
+    @Override
+    public List<DailyDiscipline> getAllDailyDisciplinesByCompetencyId(UUID competencyId) {
+        return List.of();
+    }
+
+
 }

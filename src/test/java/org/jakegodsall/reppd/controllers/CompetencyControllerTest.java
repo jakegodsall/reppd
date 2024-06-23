@@ -245,18 +245,18 @@ class CompetencyControllerTest {
     void deleteCompetencyById() throws Exception {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
 
-        given(competencyService.deleteGoalById(any(UUID.class))).willReturn(true);
+        given(competencyService.deleteCompetencyById(any(UUID.class))).willReturn(true);
 
-        mockMvc.perform(delete(CompetencyController.API_V1_GOAL_DETAIL, competencyDTO.getId())
+        mockMvc.perform(delete(CompetencyController.API_V1_COMPETENCY_DETAIL, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void deleteCompetencyById_notFound() throws Exception{
-        given(competencyService.deleteGoalById(any(UUID.class))).willReturn(false);
+        given(competencyService.deleteCompetencyById(any(UUID.class))).willReturn(false);
 
-        mockMvc.perform(delete(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(delete(CompetencyController.API_V1_COMPETENCY_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

@@ -1,6 +1,7 @@
 package org.jakegodsall.reppd.services;
 
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
+import org.jakegodsall.reppd.entities.DailyDiscipline;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +14,6 @@ public interface CompetencyService {
     Optional<CompetencyDTO> updateCompetencyById(UUID id, CompetencyDTO competencyDTO);
     Optional<CompetencyDTO> updateCompetencyPatchById(UUID id, CompetencyDTO competencyDTO);
     boolean deleteCompetencyById(UUID id);
+
+    List<DailyDiscipline> getAllDailyDisciplinesByCompetencyId(UUID competencyId);
 }

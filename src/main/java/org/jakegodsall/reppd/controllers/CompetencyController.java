@@ -3,6 +3,7 @@ package org.jakegodsall.reppd.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
+import org.jakegodsall.reppd.entities.DailyDiscipline;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.springframework.http.HttpHeaders;
@@ -19,13 +20,14 @@ public class CompetencyController {
 
     public static final String API_V1_COMPETENCY = "/api/v1/competency";
     public static final String API_V1_COMPETENCY_DETAIL = API_V1_COMPETENCY + "/{competencyId}";
+    public static final String API_V1_COMPETENCY_DAILYDISCIPLINES = API_V1_COMPETENCY_DETAIL + "/daily-disciplines";
 
     private final CompetencyService competencyService;
 
     @GetMapping(API_V1_COMPETENCY)
     public ResponseEntity<List<CompetencyDTO>> getAllCompetencies() {
-        List<CompetencyDTO> goals = competencyService.getAllCompetencies();
-        return ResponseEntity.ok(goals);
+        List<CompetencyDTO> competencies = competencyService.getAllCompetencies();
+        return ResponseEntity.ok(competencies);
     }
 
     @PostMapping(API_V1_COMPETENCY)
@@ -70,5 +72,11 @@ public class CompetencyController {
             throw new NotFoundException();
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DailyDiscipline>> getAllDailyDisciplinesByCompetencyId(@PathVariable("competencyId") UUID competencyId) {
+        List<DailyDiscipline> dailyDisciplines = competencyService.getAllDailyDisciplinesByCompetencyId(competencyId);
+        return ResponseEntity.ok(dailyDisciplines);
     }
 }
