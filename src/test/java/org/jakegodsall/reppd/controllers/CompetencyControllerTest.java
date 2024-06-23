@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.CompetencyService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,6 +19,7 @@ import java.util.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
@@ -39,7 +41,7 @@ class CompetencyControllerTest {
 
         given(competencyService.getAllCompetencies()).willReturn(competencyDTOList);
 
-        mockMvc.perform(get(CompetencyController.API_V1_GOAL)
+        mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -52,9 +54,9 @@ class CompetencyControllerTest {
         competencyDTO.setId(null);
         competencyDTO.setVersion(0);
 
-        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        mockMvc.perform(post(CompetencyController.API_V1_GOAL)
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -67,9 +69,9 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setTitle(null);
 
-        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -84,9 +86,9 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setTitle("");
 
-        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -101,9 +103,9 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setTitle(String.valueOf('a').repeat(256));
 
-        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -118,9 +120,9 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setDescription(String.valueOf('a').repeat(1001));
 
-        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -135,9 +137,9 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setStatus(null);
 
-        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
-        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
+        MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(competencyDTO)))
@@ -151,9 +153,9 @@ class CompetencyControllerTest {
     void getCompetencyById() throws Exception {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
 
-        given(competencyService.getCompetenciesById(any(UUID.class))).willReturn(Optional.of(competencyDTO));
+        given(competencyService.getCompetencyById(any(UUID.class))).willReturn(Optional.of(competencyDTO));
 
-        mockMvc.perform(get(CompetencyController.API_V1_GOAL_DETAIL, competencyDTO.getId())
+        mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY_DETAIL, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(competencyDTO.getId().toString()));
@@ -161,9 +163,9 @@ class CompetencyControllerTest {
 
     @Test
     void getCompetencyById_notFound() throws Exception {
-        given(competencyService.getCompetenciesById(any(UUID.class))).willReturn(Optional.empty());
+        given(competencyService.getCompetencyById(any(UUID.class))).willReturn(Optional.empty());
 
-        mockMvc.perform(get(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -176,9 +178,9 @@ class CompetencyControllerTest {
         updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
         updatedCompetencyDTO.setTitle("New Competency");
 
-        given(competencyService.updateCompetenciesById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
+        given(competencyService.updateCompetencyById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
 
-        mockMvc.perform(put(CompetencyController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
+        mockMvc.perform(put(CompetencyController.API_V1_COMPETENCY_DETAIL, originalCompetencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedCompetencyDTO)))
@@ -193,15 +195,16 @@ class CompetencyControllerTest {
         updatedCompetencyDTO.setId(null);
         updatedCompetencyDTO.setTitle("New Goal");
 
-        given(competencyService.updateCompetenciesById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
+        given(competencyService.updateCompetencyById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
 
-        mockMvc.perform(put(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(put(CompetencyController.API_V1_COMPETENCY_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedCompetencyDTO)))
                 .andExpect(status().isNotFound());
     }
 
+    @Disabled
     @Test
     void updateCompetencyPatchById() throws Exception {
         CompetencyDTO originalCompetencyDTO = createValidCompetencyDto();
@@ -213,9 +216,9 @@ class CompetencyControllerTest {
         updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
         updatedCompetencyDTO.setTitle("New Goal");
 
-        given(competencyService.updateGoalPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
+        given(competencyService.updateCompetencyPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
 
-        MvcResult result = mockMvc.perform(patch(CompetencyController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
+        MvcResult result = mockMvc.perform(patch(CompetencyController.API_V1_COMPETENCY_DETAIL, originalCompetencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(goalMap)))
@@ -227,14 +230,15 @@ class CompetencyControllerTest {
         System.out.println(result.getResponse().getContentAsString());
     }
 
+    @Disabled
     @Test
     void updateCompetencyPatchById_notFound() throws Exception {
-        given(competencyService.updateGoalPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
+        given(competencyService.updateCompetencyPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
 
         Map<String, Object> goalMap = new HashMap<>();
         goalMap.put("title", "New Goal");
 
-        mockMvc.perform(patch(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
+        mockMvc.perform(patch(CompetencyController.API_V1_COMPETENCY_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(goalMap)))

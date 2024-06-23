@@ -20,7 +20,7 @@ class CompetencyRepositoryTest {
 
     @Test
     void saveGoal() {
-        Competency savedGoal = competencyRepository.save(createValidGoal());
+        Competency savedGoal = competencyRepository.save(createValidCompetencyWithoutDailyDisciplines());
         assertThat(savedGoal.getId()).isNotNull();
     }
 
@@ -28,7 +28,7 @@ class CompetencyRepositoryTest {
 
     @Test
     void saveGoalNullTitle() {
-        Competency goalToSave = createValidGoal();
+        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
         goalToSave.setTitle(null);
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -39,7 +39,7 @@ class CompetencyRepositoryTest {
 
     @Test
     void saveGoalBlankTitle() {
-        Competency goalToSave = createValidGoal();
+        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
         goalToSave.setTitle("");
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -50,7 +50,7 @@ class CompetencyRepositoryTest {
 
     @Test
     void saveGoalTitleTooLong() {
-        Competency goalToSave = createValidGoal();
+        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
         goalToSave.setTitle(String.valueOf('a').repeat(266));
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -61,7 +61,7 @@ class CompetencyRepositoryTest {
 
     @Test
     void saveGoalDescriptionTooLong() {
-        Competency goalToSave = createValidGoal();
+        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
         goalToSave.setDescription(String.valueOf('a').repeat(1001));
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -72,7 +72,7 @@ class CompetencyRepositoryTest {
 
     @Test
     void saveGoalNullStatus() {
-        Competency goalToSave = createValidGoal();
+        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
         goalToSave.setStatus(null);
 
         assertThrows(ConstraintViolationException.class, () -> {
@@ -81,17 +81,12 @@ class CompetencyRepositoryTest {
         });
     }
 
-    private Competency createValidGoal() {
+    private Competency createValidCompetencyWithoutDailyDisciplines() {
         return Competency.builder()
-                .title("Become a Java developer")
-                .description("Become a Java developer")
+                .title("Competency")
+                .description("This is a test competency")
                 .status(Status.ACTIVE)
                 .startDate(LocalDateTime.now())
-                .smartDetail("Smart Detail")
-                .measurableDetail("Measurable Detail")
-                .achievableDetail("Achievable Detail")
-                .relevantDetail("Relevant Detail")
-                .timeboundDetail("Timebound Detail")
                 .build();
     }
 }
