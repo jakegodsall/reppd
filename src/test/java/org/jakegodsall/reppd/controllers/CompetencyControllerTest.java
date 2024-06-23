@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
+import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.junit.jupiter.api.Disabled;
@@ -35,9 +36,9 @@ class CompetencyControllerTest {
     @Test
     void listAllCompetencies() throws Exception {
         List<CompetencyDTO> competencyDTOList = new ArrayList<>(List.of(
-                createValidCompetencyDto(),
-                createValidCompetencyDto(),
-                createValidCompetencyDto()));
+                createValidCompetencyDtoWithoutDailyDisciplines(),
+                createValidCompetencyDtoWithoutDailyDisciplines(),
+                createValidCompetencyDtoWithoutDailyDisciplines()));
 
         given(competencyService.getAllCompetencies()).willReturn(competencyDTOList);
 
@@ -50,7 +51,7 @@ class CompetencyControllerTest {
 
     @Test
     void createCompetency() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         competencyDTO.setId(null);
         competencyDTO.setVersion(0);
 
@@ -66,7 +67,7 @@ class CompetencyControllerTest {
 
     @Test
     void createCompetency_nullTitle() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         competencyDTO.setTitle(null);
 
         given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
@@ -83,7 +84,7 @@ class CompetencyControllerTest {
 
     @Test
     void createCompetency_blankTitle() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         competencyDTO.setTitle("");
 
         given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
@@ -100,7 +101,7 @@ class CompetencyControllerTest {
 
     @Test
     void createCompetency_titleTooLong() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         competencyDTO.setTitle(String.valueOf('a').repeat(256));
 
         given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
@@ -117,7 +118,7 @@ class CompetencyControllerTest {
 
     @Test
     void createCompetency_descriptionTooLong() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         competencyDTO.setDescription(String.valueOf('a').repeat(1001));
 
         given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
@@ -134,7 +135,7 @@ class CompetencyControllerTest {
 
     @Test
     void createCompetency_nullStatus() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         competencyDTO.setStatus(null);
 
         given(competencyService.createCompetency(any(CompetencyDTO.class))).willReturn(competencyDTO);
@@ -151,7 +152,7 @@ class CompetencyControllerTest {
 
     @Test
     void getCompetencyById() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
 
         given(competencyService.getCompetencyById(any(UUID.class))).willReturn(Optional.of(competencyDTO));
 
@@ -172,9 +173,9 @@ class CompetencyControllerTest {
 
     @Test
     void updateCompetencyById() throws Exception {
-        CompetencyDTO originalCompetencyDTO = createValidCompetencyDto();
+        CompetencyDTO originalCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
 
-        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDto();
+        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
         updatedCompetencyDTO.setTitle("New Competency");
 
@@ -191,7 +192,7 @@ class CompetencyControllerTest {
 
     @Test
     void updateCompetencyById_notFound() throws Exception {
-        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDto();
+        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         updatedCompetencyDTO.setId(null);
         updatedCompetencyDTO.setTitle("New Goal");
 
@@ -207,12 +208,12 @@ class CompetencyControllerTest {
     @Disabled
     @Test
     void updateCompetencyPatchById() throws Exception {
-        CompetencyDTO originalCompetencyDTO = createValidCompetencyDto();
+        CompetencyDTO originalCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
 
         Map<String, Object> goalMap = new HashMap<>();
         goalMap.put("title", "New Goal");
 
-        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDto();
+        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
         updatedCompetencyDTO.setTitle("New Goal");
 
@@ -247,7 +248,7 @@ class CompetencyControllerTest {
 
     @Test
     void deleteCompetencyById() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDto();
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
 
         given(competencyService.deleteCompetencyById(any(UUID.class))).willReturn(true);
 
@@ -265,13 +266,53 @@ class CompetencyControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    private CompetencyDTO createValidCompetencyDto() {
+    @Test
+    void listAllDailyDisciplinesByCompetency() throws Exception {
+        UUID competencyId = UUID.randomUUID();
+        List<DailyDisciplineDTO> dailyDisciplines = createListOfDailyDisciplines();
+
+        given(competencyService.getAllDailyDisciplinesByCompetencyId(competencyId))
+                .willReturn(dailyDisciplines);
+
+        mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
+
+    private CompetencyDTO createValidCompetencyDtoWithoutDailyDisciplines() {
         return CompetencyDTO.builder()
-                .id(UUID.randomUUID())
-                .title("Become a Java developer")
-                .description("Become a Java developer")
+                .title("Competency")
+                .description("This is a test competency")
                 .status(Status.ACTIVE)
                 .startDate(LocalDateTime.now())
                 .build();
     }
+
+    private List<DailyDisciplineDTO> createListOfDailyDisciplines() {
+        DailyDisciplineDTO dd1 = DailyDisciplineDTO.builder()
+                .title("Daily Discipline 1")
+                .description("This is a test discipline")
+                .status(Status.ACTIVE)
+                .minimumValue(10L)
+                .build();
+
+        DailyDisciplineDTO dd2 = DailyDisciplineDTO.builder()
+                .title("Daily Discipline 2")
+                .description("This is a test discipline")
+                .status(Status.ACTIVE)
+                .minimumValue(10L)
+                .build();
+
+        DailyDisciplineDTO dd3= DailyDisciplineDTO.builder()
+                .title("Daily Discipline 3")
+                .description("This is a test discipline")
+                .status(Status.ACTIVE)
+                .minimumValue(10L)
+                .build();
+
+        return List.of(dd1, dd2, dd3);
+    }
+
 }

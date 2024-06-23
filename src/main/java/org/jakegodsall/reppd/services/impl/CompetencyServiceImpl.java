@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
+import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.entities.DailyDiscipline;
 import org.jakegodsall.reppd.repositories.CompetencyRepository;
 import org.jakegodsall.reppd.services.CompetencyService;
@@ -48,7 +49,7 @@ public class CompetencyServiceImpl implements CompetencyService {
     }
 
     @Override
-    public List<DailyDiscipline> getAllDailyDisciplinesByCompetencyId(UUID competencyId) {
+    public List<DailyDisciplineDTO> getAllDailyDisciplinesByCompetencyId(UUID competencyId) {
         return List.of();
     }
 
