@@ -18,7 +18,6 @@ import java.util.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
@@ -38,7 +37,7 @@ class CompetencyControllerTest {
                 createValidCompetencyDto(),
                 createValidCompetencyDto()));
 
-        given(competencyService.getAllGoals()).willReturn(competencyDTOList);
+        given(competencyService.getAllCompetencies()).willReturn(competencyDTOList);
 
         mockMvc.perform(get(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON))
@@ -53,7 +52,7 @@ class CompetencyControllerTest {
         competencyDTO.setId(null);
         competencyDTO.setVersion(0);
 
-        given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
         mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -68,7 +67,7 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setTitle(null);
 
-        given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
         MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -85,7 +84,7 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setTitle("");
 
-        given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
         MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -102,7 +101,7 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setTitle(String.valueOf('a').repeat(256));
 
-        given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
         MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -119,7 +118,7 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setDescription(String.valueOf('a').repeat(1001));
 
-        given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
         MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -136,7 +135,7 @@ class CompetencyControllerTest {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
         competencyDTO.setStatus(null);
 
-        given(competencyService.createGoal(any(CompetencyDTO.class))).willReturn(competencyDTO);
+        given(competencyService.createCompetencies(any(CompetencyDTO.class))).willReturn(competencyDTO);
 
         MvcResult result = mockMvc.perform(post(CompetencyController.API_V1_GOAL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -152,7 +151,7 @@ class CompetencyControllerTest {
     void getCompetencyById() throws Exception {
         CompetencyDTO competencyDTO = createValidCompetencyDto();
 
-        given(competencyService.getGoalById(any(UUID.class))).willReturn(Optional.of(competencyDTO));
+        given(competencyService.getCompetenciesById(any(UUID.class))).willReturn(Optional.of(competencyDTO));
 
         mockMvc.perform(get(CompetencyController.API_V1_GOAL_DETAIL, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON))
@@ -162,7 +161,7 @@ class CompetencyControllerTest {
 
     @Test
     void getCompetencyById_notFound() throws Exception {
-        given(competencyService.getGoalById(any(UUID.class))).willReturn(Optional.empty());
+        given(competencyService.getCompetenciesById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
@@ -177,7 +176,7 @@ class CompetencyControllerTest {
         updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
         updatedCompetencyDTO.setTitle("New Competency");
 
-        given(competencyService.updateGoalById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
+        given(competencyService.updateCompetenciesById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
 
         mockMvc.perform(put(CompetencyController.API_V1_GOAL_DETAIL, originalCompetencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -194,7 +193,7 @@ class CompetencyControllerTest {
         updatedCompetencyDTO.setId(null);
         updatedCompetencyDTO.setTitle("New Goal");
 
-        given(competencyService.updateGoalById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
+        given(competencyService.updateCompetenciesById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
 
         mockMvc.perform(put(CompetencyController.API_V1_GOAL_DETAIL, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)

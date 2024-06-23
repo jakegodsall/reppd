@@ -17,32 +17,32 @@ public class CompetencyServiceImpl implements CompetencyService {
     private final CompetencyRepository competencyRepository;
 
     @Override
-    public List<CompetencyDTO> getAllGoals() {
+    public List<CompetencyDTO> getAllCompetencies() {
         return List.of();
     }
 
     @Override
-    public CompetencyDTO createGoal(CompetencyDTO competencyDTO) {
+    public CompetencyDTO createCompetency(CompetencyDTO competencyDTO) {
         return null;
     }
 
     @Override
-    public Optional<CompetencyDTO> getGoalById(UUID id) {
+    public Optional<CompetencyDTO> getCompetencyById(UUID id) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<CompetencyDTO> updateGoalById(UUID id, CompetencyDTO competencyDTO) {
+    public Optional<CompetencyDTO> updateCompetencyById(UUID id, CompetencyDTO competencyDTO) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<CompetencyDTO> updateGoalPatchById(UUID id, CompetencyDTO competencyDTO) {
+    public Optional<CompetencyDTO> updateCompetencyPatchById(UUID id, CompetencyDTO competencyDTO) {
         return Optional.empty();
     }
 
     @Override
-    public boolean deleteGoalById(UUID id) {
-        return true;
+    public boolean deleteCompetencyById(UUID id) {
+        return false;
     }
 }

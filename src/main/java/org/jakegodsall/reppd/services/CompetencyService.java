@@ -7,10 +7,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CompetencyService {
-    List<CompetencyDTO> getAllGoals();
-    CompetencyDTO createGoal(CompetencyDTO competencyDTO);
-    Optional<CompetencyDTO> getGoalById(UUID id);
-    Optional<CompetencyDTO> updateGoalById(UUID id, CompetencyDTO competencyDTO);
-    Optional<CompetencyDTO> updateGoalPatchById(UUID id, CompetencyDTO competencyDTO);
-    boolean deleteGoalById(UUID id);
+    List<CompetencyDTO> getAllCompetencies();
+    CompetencyDTO createCompetency(CompetencyDTO competencyDTO);
+    Optional<CompetencyDTO> getCompetencyById(UUID id);
+    Optional<CompetencyDTO> updateCompetencyById(UUID id, CompetencyDTO competencyDTO);
+    Optional<CompetencyDTO> updateCompetencyPatchById(UUID id, CompetencyDTO competencyDTO);
+    boolean deleteCompetencyById(UUID id);
 }
