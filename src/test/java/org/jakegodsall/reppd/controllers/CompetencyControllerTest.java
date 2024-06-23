@@ -159,6 +159,7 @@ class CompetencyControllerTest {
         mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY_DETAIL, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(competencyDTO.getId().toString()));
     }
 
@@ -283,6 +284,7 @@ class CompetencyControllerTest {
 
     private CompetencyDTO createValidCompetencyDtoWithoutDailyDisciplines() {
         return CompetencyDTO.builder()
+                .id(UUID.randomUUID())
                 .title("Competency")
                 .description("This is a test competency")
                 .status(Status.ACTIVE)
