@@ -36,4 +36,14 @@ public class DailyDiscipline extends BaseEntity {
         this.competency = null;
         competency.getDailyDisciplines().remove(this);
     }
+
+    @Override
+    public String toString() {
+        return "DailyDiscipline{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", minimumValue=" + minimumValue +
+                '}';
+    }
 }
