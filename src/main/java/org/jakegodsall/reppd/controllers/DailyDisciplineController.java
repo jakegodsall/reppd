@@ -13,8 +13,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 public class DailyDisciplineController {
-    private final String API_V1_DAILY_DISCIPLINE = "/api/v1/daily-discipline";
-    private final String API_V1_DAILY_DISCIPLINE_DETAIL = API_V1_DAILY_DISCIPLINE + "/{dailyDisciplineId}";
+    public static final String API_V1_DAILY_DISCIPLINE = "/api/v1/daily-discipline";
+    public static final String API_V1_DAILY_DISCIPLINE_DETAIL = API_V1_DAILY_DISCIPLINE + "/{dailyDisciplineId}";
 
     private final DailyDisciplineService dailyDisciplineService;
 

@@ -12,9 +12,11 @@ import org.jakegodsall.reppd.entities.enums.Status;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class DailyDisciplineDTO {
+public class DailyDisciplineDTO extends BaseDto {
+
     private String title;
     private String description;
     private Status status;
     private Long minimumValue;
+
 }

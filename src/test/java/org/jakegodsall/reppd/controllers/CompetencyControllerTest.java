@@ -5,11 +5,13 @@ import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.CompetencyService;
+import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
+@Import(DailyDisciplineService.class)
 class CompetencyControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -175,9 +178,10 @@ class CompetencyControllerTest {
     @Test
     void updateCompetencyById() throws Exception {
         CompetencyDTO originalCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
-
         CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
-        updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
+
+        updatedCompetencyDTO.setId(null);
+        updatedCompetencyDTO.setVersion(null);
         updatedCompetencyDTO.setTitle("New Competency");
 
         given(competencyService.updateCompetencyById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
@@ -188,6 +192,7 @@ class CompetencyControllerTest {
                 .content(objectMapper.writeValueAsString(updatedCompetencyDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(originalCompetencyDTO.getId().toString()))
+                .andExpect(jsonPath("$.version").value(0))
                 .andExpect(jsonPath("$.title").value(updatedCompetencyDTO.getTitle()));
     }
 
@@ -195,6 +200,7 @@ class CompetencyControllerTest {
     void updateCompetencyById_notFound() throws Exception {
         CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         updatedCompetencyDTO.setId(null);
+        updatedCompetencyDTO.setVersion(null);
         updatedCompetencyDTO.setTitle("New Goal");
 
         given(competencyService.updateCompetencyById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
