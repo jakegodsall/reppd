@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -35,6 +36,8 @@ class CompetencyControllerTest {
 
     @MockBean
     CompetencyService competencyService;
+    @MockBean
+    DailyDisciplineService dailyDisciplineService;
 
     @Test
     void listAllCompetencies() throws Exception {
@@ -180,8 +183,10 @@ class CompetencyControllerTest {
         CompetencyDTO originalCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
         CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
 
-        updatedCompetencyDTO.setId(null);
-        updatedCompetencyDTO.setVersion(null);
+        updatedCompetencyDTO.setId(UUID.randomUUID());
+        updatedCompetencyDTO.setVersion(0);
+        updatedCompetencyDTO.setTitle("Chinese Language");
+
         updatedCompetencyDTO.setTitle("New Competency");
 
         given(competencyService.updateCompetencyById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
@@ -191,7 +196,7 @@ class CompetencyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedCompetencyDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(originalCompetencyDTO.getId().toString()))
+                .andExpect(jsonPath("$.id").value(updatedCompetencyDTO.getId().toString()))
                 .andExpect(jsonPath("$.version").value(0))
                 .andExpect(jsonPath("$.title").value(updatedCompetencyDTO.getTitle()));
     }
@@ -274,7 +279,7 @@ class CompetencyControllerTest {
     }
 
     @Test
-    void listAllDailyDisciplinesByCompetency() throws Exception {
+    void listAllDailyDisciplinesByCompetencyId() throws Exception {
         UUID competencyId = UUID.randomUUID();
         List<DailyDisciplineDTO> dailyDisciplines = createListOfDailyDisciplines();
 
@@ -286,6 +291,43 @@ class CompetencyControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
+    }
+
+    @Test
+    void createDailyDisciplineByCompetencyId() throws Exception {
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
+        competencyDTO.setTitle("Chinese Language");
+
+        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+        dailyDisciplineToCreate.setTitle("Learn 10 new words");
+        dailyDisciplineToCreate.setCompetency(competencyDTO);
+
+        given(competencyService.getCompetencyById(competencyDTO.getId())).willReturn(Optional.of(competencyDTO));
+        given(dailyDisciplineService.createDailyDiscipline(dailyDisciplineToCreate))
+                .willReturn(dailyDisciplineToCreate);
+
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyDTO.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dailyDisciplineToCreate)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(dailyDisciplineToCreate.getId().toString()))
+                .andExpect(jsonPath("$.title").value(dailyDisciplineToCreate.getTitle()))
+                .andExpect(jsonPath("$.competency.id").value(competencyDTO.getId().toString()));
+    }
+
+    @Test
+    void createDailyDisciplineByCompetencyId_competencyNotFound() throws Exception {
+        UUID competencyId = UUID.randomUUID();
+        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+
+        given(competencyService.getCompetencyById(competencyId)).willReturn(Optional.empty());
+
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dailyDisciplineToCreate)))
+                .andExpect(status().isNotFound());
     }
 
     private CompetencyDTO createValidCompetencyDtoWithoutDailyDisciplines() {
@@ -300,24 +342,30 @@ class CompetencyControllerTest {
 
     private List<DailyDisciplineDTO> createListOfDailyDisciplines() {
         DailyDisciplineDTO dd1 = DailyDisciplineDTO.builder()
+                .id(UUID.randomUUID())
                 .title("Daily Discipline 1")
                 .description("This is a test discipline")
                 .status(Status.ACTIVE)
                 .minimumValue(10L)
+                .competency(createValidCompetencyDtoWithoutDailyDisciplines())
                 .build();
 
         DailyDisciplineDTO dd2 = DailyDisciplineDTO.builder()
+                .id(UUID.randomUUID())
                 .title("Daily Discipline 2")
                 .description("This is a test discipline")
                 .status(Status.ACTIVE)
                 .minimumValue(10L)
+                .competency(createValidCompetencyDtoWithoutDailyDisciplines())
                 .build();
 
         DailyDisciplineDTO dd3= DailyDisciplineDTO.builder()
+                .id(UUID.randomUUID())
                 .title("Daily Discipline 3")
                 .description("This is a test discipline")
                 .status(Status.ACTIVE)
                 .minimumValue(10L)
+                .competency(createValidCompetencyDtoWithoutDailyDisciplines())
                 .build();
 
         return List.of(dd1, dd2, dd3);

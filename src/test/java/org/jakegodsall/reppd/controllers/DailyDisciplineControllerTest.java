@@ -7,6 +7,7 @@ import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(DailyDisciplineController.class)
 class DailyDisciplineControllerTest {
 
-    @Autowired
+    @MockBean
     private DailyDisciplineService dailyDisciplineService;
 
     @Autowired
@@ -44,10 +45,6 @@ class DailyDisciplineControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)));
-    }
-
-    @Test
-    void createDailyDiscipline() {
     }
 
     @Test
@@ -77,8 +74,8 @@ class DailyDisciplineControllerTest {
     void updateDailyDisciplineById() throws Exception {
         DailyDisciplineDTO originalDailyDisciplineDTO = createListOfDailyDisciplines().get(0);
         DailyDisciplineDTO updateDailyDisciplineDTO = createListOfDailyDisciplines().get(0);
-        updateDailyDisciplineDTO.setId(null);
-        updateDailyDisciplineDTO.setVersion(null);
+        updateDailyDisciplineDTO.setId(UUID.randomUUID());
+        updateDailyDisciplineDTO.setVersion(1);
         updateDailyDisciplineDTO.setTitle("New Daily Discipline");
 
         given(dailyDisciplineService.updateDailyDisciplineById(any(UUID.class), any(DailyDisciplineDTO.class)))
@@ -89,8 +86,8 @@ class DailyDisciplineControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDailyDisciplineDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(originalDailyDisciplineDTO.getId()))
-                .andExpect(jsonPath("$.version").value(0))
+                .andExpect(jsonPath("$.id").value(updateDailyDisciplineDTO.getId()))
+                .andExpect(jsonPath("$.version").value(1))
                 .andExpect(jsonPath("$.title").value(updateDailyDisciplineDTO.getTitle()));
     }
 

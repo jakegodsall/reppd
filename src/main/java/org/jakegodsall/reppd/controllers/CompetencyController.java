@@ -6,6 +6,7 @@ import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.CompetencyService;
+import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class CompetencyController {
     public static final String API_V1_COMPETENCY_DAILY_DISCIPLINES = API_V1_COMPETENCY_DETAIL + "/daily-discipline";
 
     private final CompetencyService competencyService;
+    private final DailyDisciplineService dailyDisciplineService;
 
     @GetMapping(API_V1_COMPETENCY)
     public ResponseEntity<List<CompetencyDTO>> getAllCompetencies() {
@@ -78,5 +80,16 @@ public class CompetencyController {
     public ResponseEntity<List<DailyDisciplineDTO>> getAllDailyDisciplinesByCompetencyId(@PathVariable("competencyId") UUID competencyId) {
         List<DailyDisciplineDTO> dailyDisciplines = competencyService.getAllDailyDisciplinesByCompetencyId(competencyId);
         return ResponseEntity.ok(dailyDisciplines);
+    }
+
+    @PostMapping(API_V1_COMPETENCY_DAILY_DISCIPLINES)
+    public ResponseEntity<DailyDisciplineDTO> createDailyDisciplineByCompetencyId(
+            @PathVariable("competencyId") UUID competencyId,
+            @RequestBody DailyDisciplineDTO dailyDisciplineDTO
+    ) {
+        CompetencyDTO competencyDTO = competencyService.getCompetencyById(competencyId).orElseThrow(NotFoundException::new);
+        dailyDisciplineDTO.setCompetency(competencyDTO);
+        DailyDisciplineDTO createdDailyDiscipline = dailyDisciplineService.createDailyDiscipline(dailyDisciplineDTO);
+        return new ResponseEntity<>(createdDailyDiscipline, HttpStatus.CREATED);
     }
 }

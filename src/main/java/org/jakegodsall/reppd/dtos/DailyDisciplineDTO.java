@@ -18,5 +18,5 @@ public class DailyDisciplineDTO extends BaseDto {
     private String description;
     private Status status;
     private Long minimumValue;
-
+    private CompetencyDTO competency;
 }
