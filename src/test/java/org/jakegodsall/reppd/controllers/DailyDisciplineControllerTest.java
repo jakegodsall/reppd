@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,6 +46,19 @@ class DailyDisciplineControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)));
+    }
+
+    @Test
+    void getAllDailyDisciplines_emptyList() throws Exception {
+        List<DailyDisciplineDTO> list = new ArrayList<>();
+
+        given(dailyDisciplineService.getAllDailyDisciplines()).willReturn(list);
+
+        mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test

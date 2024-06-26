@@ -2,11 +2,14 @@ package org.jakegodsall.reppd.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
-import org.jakegodsall.reppd.repositories.DailyDisciplineRepository;
+import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,26 +23,36 @@ public class DailyDisciplineController {
 
     @GetMapping(API_V1_DAILY_DISCIPLINE)
     public ResponseEntity<List<DailyDisciplineDTO>> getAllDailyDisciplines() {
-        return null;
+        List<DailyDisciplineDTO> ddList = dailyDisciplineService.getAllDailyDisciplines();
+        return ResponseEntity.ok(ddList);
     }
 
-    @PostMapping(API_V1_DAILY_DISCIPLINE)
-    public ResponseEntity<DailyDisciplineDTO> createDailyDiscipline(DailyDisciplineDTO dailyDisciplineDTO) {
-        return null;
-    }
+//    @PostMapping(API_V1_DAILY_DISCIPLINE)
+//    public ResponseEntity<DailyDisciplineDTO> createDailyDiscipline(DailyDisciplineDTO dailyDisciplineDTO) {
+//        return null;
+//    }
 
     @GetMapping(API_V1_DAILY_DISCIPLINE_DETAIL)
-    public ResponseEntity<DailyDisciplineDTO> getDailyDisciplineById(@PathVariable Long dailyDisciplineId) {
-        return null;
+    public ResponseEntity<DailyDisciplineDTO> getDailyDisciplineById(@PathVariable UUID dailyDisciplineId) {
+        DailyDisciplineDTO dd = dailyDisciplineService.getDailyDisciplineById(dailyDisciplineId)
+                .orElseThrow(NotFoundException::new);
+        return ResponseEntity.ok(dd);
     }
 
     @PutMapping(API_V1_DAILY_DISCIPLINE_DETAIL)
     public ResponseEntity<DailyDisciplineDTO> updateDailyDisciplineById(UUID dailyDisciplineId, DailyDisciplineDTO dailyDisciplineDTO) {
-        return null;
+        DailyDisciplineDTO ddUpdated = dailyDisciplineService.updateDailyDisciplineById(dailyDisciplineId, dailyDisciplineDTO)
+                .orElseThrow(NotFoundException::new);
+
+        return ResponseEntity.ok(ddUpdated);
     }
 
     @DeleteMapping(API_V1_DAILY_DISCIPLINE_DETAIL)
-    public ResponseEntity<Void> deleteDailyDisciplineById(@PathVariable Long dailyDisciplineId) {
-        return null;
+    public ResponseEntity<Void> deleteDailyDisciplineById(@PathVariable UUID dailyDisciplineId) {
+        if (dailyDisciplineService.getDailyDisciplineById(dailyDisciplineId).isEmpty()) {
+            throw new NotFoundException();
+        }
+        dailyDisciplineService.deleteDailyDisciplineById(dailyDisciplineId);
+        return ResponseEntity.noContent().build();
     }
 }
