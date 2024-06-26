@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.services.impl;
 
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,15 +11,17 @@ import java.util.UUID;
 
 @Service
 public class DailyDisciplineServiceImpl implements DailyDisciplineService {
+
     @Override
-    public List<DailyDisciplineDTO> getAllDailyDisciplines() {
-        return List.of();
+    public Page<DailyDisciplineDTO> getAllDailyDisciplines(Integer pageNumber, Integer pageSize) {
+        return null;
     }
 
     @Override
     public DailyDisciplineDTO createDailyDiscipline(DailyDisciplineDTO dailyDisciplineDTO) {
         return null;
     }
+
 
     @Override
     public Optional<DailyDisciplineDTO> getDailyDisciplineById(UUID id) {

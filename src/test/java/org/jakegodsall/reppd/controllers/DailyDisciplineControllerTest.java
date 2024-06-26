@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(DailyDisciplineController.class)
 class DailyDisciplineControllerTest {
 
+    private final Integer DEFAULT_PAGE_NUMBER = 1;
+    private final Integer DEFAULT_PAGE_SIZE = 25;
+
     @MockBean
     private DailyDisciplineService dailyDisciplineService;
 
@@ -37,22 +44,26 @@ class DailyDisciplineControllerTest {
 
     @Test
     void getAllDailyDisciplines() throws Exception {
-        List<DailyDisciplineDTO> list = createListOfDailyDisciplines();
+        Page<DailyDisciplineDTO> page = createPageOfDailyDisciplines();
 
-        given(dailyDisciplineService.getAllDailyDisciplines()).willReturn(list);
+        System.out.println(page.getContent());
+
+        given(dailyDisciplineService.getAllDailyDisciplines(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE)).willReturn(page);
 
         mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$.content", hasSize(page.getContent().size())))
+                .andReturn();
     }
 
     @Test
     void getAllDailyDisciplines_emptyList() throws Exception {
-        List<DailyDisciplineDTO> list = new ArrayList<>();
+        Page<DailyDisciplineDTO> page = createPageOfDailyDisciplines();
+        page.getContent().clear();
 
-        given(dailyDisciplineService.getAllDailyDisciplines()).willReturn(list);
+        given(dailyDisciplineService.getAllDailyDisciplines(null, null)).willReturn(page);
 
         mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE)
                 .accept(MediaType.APPLICATION_JSON))
@@ -120,7 +131,6 @@ class DailyDisciplineControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDailyDisciplineDTO)))
                 .andExpect(status().isNotFound());
-
     }
 
     @Test
@@ -171,5 +181,10 @@ class DailyDisciplineControllerTest {
                 .build();
 
         return List.of(dd1, dd2, dd3);
+    }
+
+    private Page<DailyDisciplineDTO> createPageOfDailyDisciplines() {
+        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+        return new PageImpl<>(createListOfDailyDisciplines(), pageable, 100);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,11 @@ public class DailyDisciplineController {
     private final DailyDisciplineService dailyDisciplineService;
 
     @GetMapping(API_V1_DAILY_DISCIPLINE)
-    public ResponseEntity<List<DailyDisciplineDTO>> getAllDailyDisciplines() {
-        List<DailyDisciplineDTO> ddList = dailyDisciplineService.getAllDailyDisciplines();
+    public ResponseEntity<Page<DailyDisciplineDTO>> getAllDailyDisciplines(
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize
+    ) {
+        Page<DailyDisciplineDTO> ddList = dailyDisciplineService.getAllDailyDisciplines(pageNumber, pageSize);
         return ResponseEntity.ok(ddList);
     }
 
