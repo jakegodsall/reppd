@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 import org.jakegodsall.reppd.entities.enums.Status;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter

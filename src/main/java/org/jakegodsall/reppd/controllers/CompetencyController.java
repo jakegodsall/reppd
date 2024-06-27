@@ -88,8 +88,10 @@ public class CompetencyController {
             @RequestBody DailyDisciplineDTO dailyDisciplineDTO
     ) {
         CompetencyDTO competencyDTO = competencyService.getCompetencyById(competencyId).orElseThrow(NotFoundException::new);
+
         dailyDisciplineDTO.setCompetency(competencyDTO);
         DailyDisciplineDTO createdDailyDiscipline = dailyDisciplineService.createDailyDiscipline(dailyDisciplineDTO);
+
         return new ResponseEntity<>(createdDailyDiscipline, HttpStatus.CREATED);
     }
 }

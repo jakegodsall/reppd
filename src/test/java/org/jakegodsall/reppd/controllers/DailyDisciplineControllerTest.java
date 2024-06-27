@@ -60,8 +60,7 @@ class DailyDisciplineControllerTest {
 
     @Test
     void getAllDailyDisciplines_emptyList() throws Exception {
-        Page<DailyDisciplineDTO> page = createPageOfDailyDisciplines();
-        page.getContent().clear();
+        Page<DailyDisciplineDTO> page = Page.empty();
 
         given(dailyDisciplineService.getAllDailyDisciplines(null, null)).willReturn(page);
 
@@ -69,7 +68,8 @@ class DailyDisciplineControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test

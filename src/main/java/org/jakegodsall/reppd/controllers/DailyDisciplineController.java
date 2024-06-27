@@ -27,8 +27,8 @@ public class DailyDisciplineController {
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer pageSize
     ) {
-        Page<DailyDisciplineDTO> ddList = dailyDisciplineService.getAllDailyDisciplines(pageNumber, pageSize);
-        return ResponseEntity.ok(ddList);
+        Page<DailyDisciplineDTO> ddPage = dailyDisciplineService.getAllDailyDisciplines(pageNumber, pageSize);
+        return ResponseEntity.ok(ddPage);
     }
 
 //    @PostMapping(API_V1_DAILY_DISCIPLINE)

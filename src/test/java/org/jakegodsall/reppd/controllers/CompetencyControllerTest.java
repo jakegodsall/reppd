@@ -296,15 +296,16 @@ class CompetencyControllerTest {
     @Test
     void createDailyDisciplineByCompetencyId() throws Exception {
         CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
+        competencyDTO.setId(UUID.randomUUID()); // Ensure the ID is set
         competencyDTO.setTitle("Chinese Language");
 
         DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+        dailyDisciplineToCreate.setId(UUID.randomUUID()); // Ensure the ID is set
         dailyDisciplineToCreate.setTitle("Learn 10 new words");
         dailyDisciplineToCreate.setCompetency(competencyDTO);
 
         given(competencyService.getCompetencyById(competencyDTO.getId())).willReturn(Optional.of(competencyDTO));
-        given(dailyDisciplineService.createDailyDiscipline(dailyDisciplineToCreate))
-                .willReturn(dailyDisciplineToCreate);
+        given(dailyDisciplineService.createDailyDiscipline(dailyDisciplineToCreate)).willReturn(dailyDisciplineToCreate);
 
         mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
