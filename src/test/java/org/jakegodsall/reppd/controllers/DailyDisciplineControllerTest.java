@@ -114,7 +114,7 @@ class DailyDisciplineControllerTest {
     void updateDailyDisciplineById() throws Exception {
         DailyDisciplineDTO originalDailyDisciplineDTO = createListOfDailyDisciplines().get(0);
         DailyDisciplineDTO updateDailyDisciplineDTO = createListOfDailyDisciplines().get(0);
-        updateDailyDisciplineDTO.setId(UUID.randomUUID());
+        updateDailyDisciplineDTO.setId(originalDailyDisciplineDTO.getId());
         updateDailyDisciplineDTO.setVersion(1);
         updateDailyDisciplineDTO.setTitle("New Daily Discipline");
 
@@ -125,7 +125,7 @@ class DailyDisciplineControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDailyDisciplineDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(updateDailyDisciplineDTO.getId()))
+                .andExpect(jsonPath("$.id").value(updateDailyDisciplineDTO.getId().toString()))
                 .andExpect(jsonPath("$.version").value(1))
                 .andExpect(jsonPath("$.title").value(updateDailyDisciplineDTO.getTitle()));
     }

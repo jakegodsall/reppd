@@ -44,7 +44,10 @@ public class DailyDisciplineController {
     }
 
     @PutMapping(API_V1_DAILY_DISCIPLINE_DETAIL)
-    public ResponseEntity<DailyDisciplineDTO> updateDailyDisciplineById(UUID dailyDisciplineId, DailyDisciplineDTO dailyDisciplineDTO) {
+    public ResponseEntity<DailyDisciplineDTO> updateDailyDisciplineById(
+            @PathVariable UUID dailyDisciplineId,
+            @RequestBody DailyDisciplineDTO dailyDisciplineDTO
+    ) {
         DailyDisciplineDTO ddUpdated = dailyDisciplineService.updateDailyDisciplineById(dailyDisciplineId, dailyDisciplineDTO)
                 .orElseThrow(NotFoundException::new);
 
