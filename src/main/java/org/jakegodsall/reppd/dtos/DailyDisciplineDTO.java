@@ -1,9 +1,6 @@
 package org.jakegodsall.reppd.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.jakegodsall.reppd.entities.enums.Status;
 
@@ -12,6 +9,7 @@ import org.jakegodsall.reppd.entities.enums.Status;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString
 public class DailyDisciplineDTO extends BaseDto {
 
     private String title;

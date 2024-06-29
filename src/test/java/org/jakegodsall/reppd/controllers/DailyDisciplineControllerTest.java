@@ -122,6 +122,7 @@ class DailyDisciplineControllerTest {
                 .willReturn(Optional.of(updateDailyDisciplineDTO));
 
         mockMvc.perform(put(DailyDisciplineController.API_V1_DAILY_DISCIPLINE_DETAIL, originalDailyDisciplineDTO.getId())
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDailyDisciplineDTO)))
                 .andExpect(status().isOk())

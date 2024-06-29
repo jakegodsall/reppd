@@ -72,16 +72,17 @@ public class CompetencyController {
         return ResponseEntity.ok(dailyDisciplines);
     }
 
-    @PostMapping(API_V1_COMPETENCY_DAILY_DISCIPLINES)
+    @PostMapping("api/v1/competency/{competencyId}/daily-discipline")
     public ResponseEntity<DailyDisciplineDTO> createDailyDisciplineByCompetencyId(
             @PathVariable("competencyId") UUID competencyId,
             @RequestBody DailyDisciplineDTO dailyDisciplineDTO
     ) {
-        CompetencyDTO competencyDTO = competencyService.getCompetencyById(competencyId).orElseThrow(NotFoundException::new);
+        CompetencyDTO competencyDTO = competencyService.getCompetencyById(competencyId)
+                .orElseThrow(NotFoundException::new);
 
         dailyDisciplineDTO.setCompetency(competencyDTO);
         DailyDisciplineDTO createdDailyDiscipline = dailyDisciplineService.createDailyDiscipline(dailyDisciplineDTO);
 
-        return new ResponseEntity<>(createdDailyDiscipline, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDailyDiscipline);
     }
 }

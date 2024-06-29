@@ -3,11 +3,13 @@ package org.jakegodsall.reppd.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
+import org.jakegodsall.reppd.entities.DailyDiscipline;
 import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -254,23 +256,54 @@ class CompetencyControllerTest {
 
     @Test
     void createDailyDisciplineByCompetencyId() throws Exception {
-        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
-        competencyDTO.setId(UUID.randomUUID()); // Ensure the ID is set
-        competencyDTO.setTitle("Chinese Language");
+        CompetencyDTO competencyDTO = CompetencyDTO.builder()
+                .id(UUID.randomUUID())
+                .title("Chinese Language")
+                .description("Learn to speak Chinese fluently")
+                .status(Status.ACTIVE)
+                .createdDate(LocalDateTime.now())
 
-        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
-        dailyDisciplineToCreate.setId(UUID.randomUUID()); // Ensure the ID is set
-        dailyDisciplineToCreate.setTitle("Learn 10 new words");
-        dailyDisciplineToCreate.setCompetency(competencyDTO);
+                .lastModifiedDate(LocalDateTime.now())
+                .startDate(LocalDateTime.now())
+                .version(0)
+                .build();
 
-        given(competencyService.getCompetencyById(competencyDTO.getId())).willReturn(Optional.of(competencyDTO));
-        given(dailyDisciplineService.createDailyDiscipline(dailyDisciplineToCreate)).willReturn(dailyDisciplineToCreate);
+        DailyDisciplineDTO dailyDisciplineToCreate = DailyDisciplineDTO.builder()
+                .id(UUID.randomUUID())
+                .title("Learn 10 new words")
+                .minimumValue(10L)
+                .description("Learn 10 new words using example sentences in context")
+                .status(Status.ACTIVE)
+                .competency(competencyDTO)
 
-        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyDTO.getId())
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .version(0)
+                .build();
+
+        given(competencyService.getCompetencyById(any(UUID.class)))
+                .willReturn(Optional.of(competencyDTO));
+        given(dailyDisciplineService.createDailyDiscipline(any(DailyDisciplineDTO.class)))
+                .willReturn(dailyDisciplineToCreate);
+
+
+        String serialisedJson = objectMapper.writeValueAsString(dailyDisciplineToCreate);
+        System.out.println("Request body JSON: " + serialisedJson);
+
+        MvcResult result = mockMvc.perform(post("/api/v1/competency/{competencyId}/daily-discipline", competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dailyDisciplineToCreate)))
-                .andExpect(status().isCreated())
+                .content(serialisedJson))
+                .andExpect(status().isCreated()).andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+
+        System.out.println("Response JSON: " + responseContent);
+
+        mockMvc.perform(post("/api/v1/competency/{competencyId}/daily-discipline", competencyDTO.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialisedJson))
                 .andExpect(jsonPath("$.id").value(dailyDisciplineToCreate.getId().toString()))
                 .andExpect(jsonPath("$.title").value(dailyDisciplineToCreate.getTitle()))
                 .andExpect(jsonPath("$.competency.id").value(competencyDTO.getId().toString()));
