@@ -39,11 +39,6 @@ public class CompetencyServiceImpl implements CompetencyService {
     }
 
     @Override
-    public Optional<CompetencyDTO> updateCompetencyPatchById(UUID id, CompetencyDTO competencyDTO) {
-        return Optional.empty();
-    }
-
-    @Override
     public boolean deleteCompetencyById(UUID id) {
         return false;
     }

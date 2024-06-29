@@ -217,47 +217,6 @@ class CompetencyControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Disabled
-    @Test
-    void updateCompetencyPatchById() throws Exception {
-        CompetencyDTO originalCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
-
-        Map<String, Object> goalMap = new HashMap<>();
-        goalMap.put("title", "New Goal");
-
-        CompetencyDTO updatedCompetencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
-        updatedCompetencyDTO.setId(originalCompetencyDTO.getId());
-        updatedCompetencyDTO.setTitle("New Goal");
-
-        given(competencyService.updateCompetencyPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.of(updatedCompetencyDTO));
-
-        MvcResult result = mockMvc.perform(patch(CompetencyController.API_V1_COMPETENCY_DETAIL, originalCompetencyDTO.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(goalMap)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(originalCompetencyDTO.getId().toString()))
-                .andExpect(jsonPath("$.title").value(goalMap.get("title")))
-                .andReturn();
-
-        System.out.println(result.getResponse().getContentAsString());
-    }
-
-    @Disabled
-    @Test
-    void updateCompetencyPatchById_notFound() throws Exception {
-        given(competencyService.updateCompetencyPatchById(any(UUID.class), any(CompetencyDTO.class))).willReturn(Optional.empty());
-
-        Map<String, Object> goalMap = new HashMap<>();
-        goalMap.put("title", "New Goal");
-
-        mockMvc.perform(patch(CompetencyController.API_V1_COMPETENCY_DETAIL, UUID.randomUUID())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(goalMap)))
-                .andExpect(status().isNotFound());
-    }
-
     @Test
     void deleteCompetencyById() throws Exception {
         CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();

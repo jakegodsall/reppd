@@ -13,7 +13,6 @@ public interface CompetencyService {
     CompetencyDTO createCompetency(CompetencyDTO competencyDTO);
     Optional<CompetencyDTO> getCompetencyById(UUID id);
     Optional<CompetencyDTO> updateCompetencyById(UUID id, CompetencyDTO competencyDTO);
-    Optional<CompetencyDTO> updateCompetencyPatchById(UUID id, CompetencyDTO competencyDTO);
     boolean deleteCompetencyById(UUID id);
 
     List<DailyDisciplineDTO> getAllDailyDisciplinesByCompetencyId(UUID competencyId);

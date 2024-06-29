@@ -58,16 +58,6 @@ public class CompetencyController {
         return ResponseEntity.ok(updatedCompetencyDTO);
     }
 
-    @PatchMapping(API_V1_COMPETENCY_DETAIL)
-    public ResponseEntity<CompetencyDTO> updateCompetencyPatchById(
-            @PathVariable("competencyId") UUID competencyId,
-            @RequestBody CompetencyDTO competencyDTO
-    ) {
-        CompetencyDTO updatedCompetencyDTO = competencyService.updateCompetencyPatchById(competencyId, competencyDTO)
-                .orElseThrow(NotFoundException::new);
-        return ResponseEntity.ok(updatedCompetencyDTO);
-    }
-
     @DeleteMapping(API_V1_COMPETENCY_DETAIL)
     public ResponseEntity<Void> deleteCompetencyById(@PathVariable("competencyId") UUID competencyId) {
         if (!competencyService.deleteCompetencyById(competencyId)) {
