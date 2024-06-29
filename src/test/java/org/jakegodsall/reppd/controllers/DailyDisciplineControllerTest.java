@@ -43,19 +43,31 @@ class DailyDisciplineControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void getAllDailyDisciplines() throws Exception {
+    void getAllDailyDisciplines_withParams() throws Exception {
         Page<DailyDisciplineDTO> page = createPageOfDailyDisciplines();
+        given(dailyDisciplineService.getAllDailyDisciplines(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE))
+                .willReturn(page);
 
-        System.out.println(page.getContent());
+        mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("pageNumber", String.valueOf(DEFAULT_PAGE_NUMBER))
+                .param("pageSize", String.valueOf(DEFAULT_PAGE_SIZE)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", hasSize(page.getNumberOfElements())));
+    }
 
-        given(dailyDisciplineService.getAllDailyDisciplines(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE)).willReturn(page);
+    @Test
+    void getAllDailyDisciplines_noParams() throws Exception {
+        Page<DailyDisciplineDTO> page = createPageOfDailyDisciplines();
+        given(dailyDisciplineService.getAllDailyDisciplines(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE))
+                .willReturn(page);
 
         mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content", hasSize(page.getContent().size())))
-                .andReturn();
+                .andExpect(jsonPath("$.content", hasSize(page.getNumberOfElements())));
     }
 
     @Test
@@ -107,7 +119,6 @@ class DailyDisciplineControllerTest {
                 .willReturn(Optional.of(updateDailyDisciplineDTO));
 
         mockMvc.perform(put(DailyDisciplineController.API_V1_DAILY_DISCIPLINE_DETAIL, originalDailyDisciplineDTO.getId())
-                .contentType(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDailyDisciplineDTO)))
                 .andExpect(status().isOk())

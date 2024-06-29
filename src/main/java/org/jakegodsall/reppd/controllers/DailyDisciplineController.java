@@ -24,8 +24,8 @@ public class DailyDisciplineController {
 
     @GetMapping(API_V1_DAILY_DISCIPLINE)
     public ResponseEntity<Page<DailyDisciplineDTO>> getAllDailyDisciplines(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize
+            @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
+            @RequestParam(required = false, defaultValue = "25") Integer pageSize
     ) {
         Page<DailyDisciplineDTO> ddPage = dailyDisciplineService.getAllDailyDisciplines(pageNumber, pageSize);
         return ResponseEntity.ok(ddPage);
