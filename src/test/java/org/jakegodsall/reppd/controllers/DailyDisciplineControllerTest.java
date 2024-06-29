@@ -71,13 +71,16 @@ class DailyDisciplineControllerTest {
     }
 
     @Test
-    void getAllDailyDisciplines_emptyList() throws Exception {
+    void getAllDailyDisciplines_emptyPage() throws Exception {
         Page<DailyDisciplineDTO> page = Page.empty();
 
-        given(dailyDisciplineService.getAllDailyDisciplines(null, null)).willReturn(page);
+        given(dailyDisciplineService.getAllDailyDisciplines(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE))
+                .willReturn(page);
 
         mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .param("pageNumber", String.valueOf(DEFAULT_PAGE_NUMBER))
+                .param("pageSize", String.valueOf(DEFAULT_PAGE_SIZE)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isArray())
