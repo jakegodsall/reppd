@@ -32,9 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(DailyDisciplineService.class)
 class CompetencyControllerTest {
 
-    private final Integer DEFAULT_PAGE_NUMBER = 1;
-    private final Integer DEFAULT_PAGE_SIZE = 25;
-
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -49,7 +46,7 @@ class CompetencyControllerTest {
     void listAllCompetencies() throws Exception {
         Page<CompetencyDTO> competencyPage = createPageOfCompetenciesWithoutDailyDisciplines();
 
-        given(competencyService.getAllCompetencies(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE)).willReturn(competencyPage);
+        given(competencyService.getAllCompetencies(CompetencyController.DEFAULT_PAGE_NUMBER, CompetencyController.DEFAULT_PAGE_SIZE)).willReturn(competencyPage);
 
         mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON))
@@ -59,10 +56,10 @@ class CompetencyControllerTest {
     }
 
     @Test
-    void listAllcompetencies_emptyPage() throws Exception {
+    void listAllCompetencies_emptyPage() throws Exception {
         Page<CompetencyDTO> competencyPage = Page.empty();
 
-        given(competencyService.getAllCompetencies(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE)).willReturn(competencyPage);
+        given(competencyService.getAllCompetencies(CompetencyController.DEFAULT_PAGE_NUMBER, CompetencyController.DEFAULT_PAGE_SIZE)).willReturn(competencyPage);
 
         mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON))
@@ -256,16 +253,31 @@ class CompetencyControllerTest {
     @Test
     void listAllDailyDisciplinesByCompetencyId() throws Exception {
         UUID competencyId = UUID.randomUUID();
-        List<DailyDisciplineDTO> dailyDisciplines = createListOfDailyDisciplines();
+        Page<DailyDisciplineDTO> dailyDisciplines = createPageOfDailyDisciplines();
 
-        given(competencyService.getAllDailyDisciplinesByCompetencyId(competencyId))
+        given(competencyService.getAllDailyDisciplinesByCompetencyId(competencyId, DailyDisciplineController.DEFAULT_PAGE_NUMBER, DailyDisciplineController.DEFAULT_PAGE_SIZE))
                 .willReturn(dailyDisciplines);
 
         mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyId)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", hasSize(3)));
+    }
+
+    @Test
+    void listAllDailyDisciplinesByCompetencyId_emptyPage() throws Exception {
+        UUID competencyId = UUID.randomUUID();
+        Page<DailyDisciplineDTO> dailyDisciplines = Page.empty();
+
+        given(competencyService.getAllDailyDisciplinesByCompetencyId(competencyId, DailyDisciplineController.DEFAULT_PAGE_NUMBER, DailyDisciplineController.DEFAULT_PAGE_SIZE))
+                .willReturn(dailyDisciplines);
+
+        mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY_DAILY_DISCIPLINES, competencyId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", hasSize(0)));
     }
 
     @Test
@@ -357,7 +369,7 @@ class CompetencyControllerTest {
 
     private Page<CompetencyDTO> createPageOfCompetenciesWithoutDailyDisciplines() {
         List<CompetencyDTO> competencies = createListValidCompetencyDtoWithoutDailyDisciplines();
-        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+        Pageable pageable = PageRequest.of(CompetencyController.DEFAULT_PAGE_NUMBER, CompetencyController.DEFAULT_PAGE_SIZE);
         return new PageImpl<>(competencies, pageable, competencies.size());
     }
 
@@ -392,5 +404,9 @@ class CompetencyControllerTest {
         return List.of(dd1, dd2, dd3);
     }
 
-
+    private Page<DailyDisciplineDTO> createPageOfDailyDisciplines() {
+        List<DailyDisciplineDTO> dailyDisciplines = createListOfDailyDisciplines();
+        Pageable pageable = PageRequest.of(DailyDisciplineController.DEFAULT_PAGE_NUMBER, DailyDisciplineController.DEFAULT_PAGE_SIZE);
+        return new PageImpl<>(dailyDisciplines, pageable, dailyDisciplines.size());
+    }
 }

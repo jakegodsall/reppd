@@ -17,8 +17,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 public class DailyDisciplineController {
+
+    // endpoints
     public static final String API_V1_DAILY_DISCIPLINE = "/api/v1/daily-discipline";
     public static final String API_V1_DAILY_DISCIPLINE_DETAIL = API_V1_DAILY_DISCIPLINE + "/{dailyDisciplineId}";
+
+    // pagination defaults
+    public static final int DEFAULT_PAGE_NUMBER = 1;
+    public static final int DEFAULT_PAGE_SIZE = 25;
 
     private final DailyDisciplineService dailyDisciplineService;
 

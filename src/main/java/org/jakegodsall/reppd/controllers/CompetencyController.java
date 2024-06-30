@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -76,8 +75,12 @@ public class CompetencyController {
     }
 
     @GetMapping(API_V1_COMPETENCY_DAILY_DISCIPLINES)
-    public ResponseEntity<List<DailyDisciplineDTO>> getAllDailyDisciplinesByCompetencyId(@PathVariable("competencyId") UUID competencyId) {
-        List<DailyDisciplineDTO> dailyDisciplines = competencyService.getAllDailyDisciplinesByCompetencyId(competencyId);
+    public ResponseEntity<Page<DailyDisciplineDTO>> getAllDailyDisciplinesByCompetencyId(@PathVariable("competencyId") UUID competencyId) {
+        Page<DailyDisciplineDTO> dailyDisciplines = competencyService.getAllDailyDisciplinesByCompetencyId(
+                competencyId,
+                DailyDisciplineController.DEFAULT_PAGE_NUMBER,
+                DailyDisciplineController.DEFAULT_PAGE_SIZE
+        );
         return ResponseEntity.ok(dailyDisciplines);
     }
 

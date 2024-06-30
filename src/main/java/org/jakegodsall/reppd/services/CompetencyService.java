@@ -4,7 +4,6 @@ import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,5 +14,5 @@ public interface CompetencyService {
     Optional<CompetencyDTO> updateCompetencyById(UUID id, CompetencyDTO competencyDTO);
     boolean deleteCompetencyById(UUID id);
 
-    List<DailyDisciplineDTO> getAllDailyDisciplinesByCompetencyId(UUID competencyId);
+    Page<DailyDisciplineDTO> getAllDailyDisciplinesByCompetencyId(UUID competencyId, Integer pageNumber, Integer pageSize);
 }

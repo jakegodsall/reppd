@@ -5,15 +5,17 @@ import org.jakegodsall.reppd.controllers.CompetencyController;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.entities.Competency;
+import org.jakegodsall.reppd.entities.DailyDiscipline;
 import org.jakegodsall.reppd.mappers.CompetencyMapper;
+import org.jakegodsall.reppd.mappers.DailyDisciplineMapper;
 import org.jakegodsall.reppd.repositories.CompetencyRepository;
+import org.jakegodsall.reppd.repositories.DailyDisciplineRepository;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +25,9 @@ public class CompetencyServiceImpl implements CompetencyService {
 
     private final CompetencyRepository competencyRepository;
     private final CompetencyMapper competencyMapper;
+
+    private final DailyDisciplineRepository dailyDisciplineRepository;
+    private final DailyDisciplineMapper dailyDisciplineMapper;
 
     @Override
     public Page<CompetencyDTO> getAllCompetencies(Integer pageNumber, Integer pageSize) {
@@ -74,8 +79,11 @@ public class CompetencyServiceImpl implements CompetencyService {
     }
 
     @Override
-    public List<DailyDisciplineDTO> getAllDailyDisciplinesByCompetencyId(UUID competencyId) {
-        return List.of();
+    public Page<DailyDisciplineDTO> getAllDailyDisciplinesByCompetencyId(UUID competencyId, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+        Page<DailyDiscipline> page = dailyDisciplineRepository.findAllByCompetencyId(competencyId, pageRequest);
+
+        return page.map(dailyDisciplineMapper::dailyDisciplineToDailyDisciplineDTO);
     }
 
     private PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
