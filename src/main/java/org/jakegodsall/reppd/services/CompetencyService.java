@@ -2,14 +2,14 @@ package org.jakegodsall.reppd.services;
 
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
-import org.jakegodsall.reppd.entities.DailyDiscipline;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface CompetencyService {
-    List<CompetencyDTO> getAllCompetencies();
+    Page<CompetencyDTO> getAllCompetencies(Integer pageNumber, Integer pageSize);
     CompetencyDTO createCompetency(CompetencyDTO competencyDTO);
     Optional<CompetencyDTO> getCompetencyById(UUID id);
     Optional<CompetencyDTO> updateCompetencyById(UUID id, CompetencyDTO competencyDTO);

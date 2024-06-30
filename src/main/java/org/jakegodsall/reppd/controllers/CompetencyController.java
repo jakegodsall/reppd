@@ -7,6 +7,7 @@ import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,24 @@ import java.util.UUID;
 @RestController
 public class CompetencyController {
 
+    // endpoints
     public static final String API_V1_COMPETENCY = "/api/v1/competency";
     public static final String API_V1_COMPETENCY_DETAIL = API_V1_COMPETENCY + "/{competencyId}";
     public static final String API_V1_COMPETENCY_DAILY_DISCIPLINES = API_V1_COMPETENCY_DETAIL + "/daily-discipline";
+
+    // pagination defaults
+    public static final int DEFAULT_PAGE_NUMBER = 1;
+    public static final int DEFAULT_PAGE_SIZE = 25;
 
     private final CompetencyService competencyService;
     private final DailyDisciplineService dailyDisciplineService;
 
     @GetMapping(API_V1_COMPETENCY)
-    public ResponseEntity<List<CompetencyDTO>> getAllCompetencies() {
-        List<CompetencyDTO> competencies = competencyService.getAllCompetencies();
+    public ResponseEntity<Page<CompetencyDTO>> getAllCompetencies(
+            @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
+            @RequestParam(required = false, defaultValue = "25") Integer pageSize
+    ) {
+        Page<CompetencyDTO> competencies = competencyService.getAllCompetencies(pageNumber, pageSize);
         return ResponseEntity.ok(competencies);
     }
 

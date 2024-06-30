@@ -3,18 +3,18 @@ package org.jakegodsall.reppd.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jakegodsall.reppd.dtos.CompetencyDTO;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
-import org.jakegodsall.reppd.entities.DailyDiscipline;
 import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.CompetencyService;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,6 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 @Import(DailyDisciplineService.class)
 class CompetencyControllerTest {
+
+    private final Integer DEFAULT_PAGE_NUMBER = 1;
+    private final Integer DEFAULT_PAGE_SIZE = 25;
+
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -43,18 +47,28 @@ class CompetencyControllerTest {
 
     @Test
     void listAllCompetencies() throws Exception {
-        List<CompetencyDTO> competencyDTOList = new ArrayList<>(List.of(
-                createValidCompetencyDtoWithoutDailyDisciplines(),
-                createValidCompetencyDtoWithoutDailyDisciplines(),
-                createValidCompetencyDtoWithoutDailyDisciplines()));
+        Page<CompetencyDTO> competencyPage = createPageOfCompetenciesWithoutDailyDisciplines();
 
-        given(competencyService.getAllCompetencies()).willReturn(competencyDTOList);
+        given(competencyService.getAllCompetencies(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE)).willReturn(competencyPage);
 
         mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$.content", hasSize(4)));
+    }
+
+    @Test
+    void listAllcompetencies_emptyPage() throws Exception {
+        Page<CompetencyDTO> competencyPage = Page.empty();
+
+        given(competencyService.getAllCompetencies(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE)).willReturn(competencyPage);
+
+        mockMvc.perform(get(CompetencyController.API_V1_COMPETENCY)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", hasSize(0)));
     }
 
     @Test
@@ -333,6 +347,20 @@ class CompetencyControllerTest {
                 .build();
     }
 
+    private List<CompetencyDTO> createListValidCompetencyDtoWithoutDailyDisciplines() {
+        return List.of(
+                CompetencyDTO.builder().id(UUID.randomUUID()).title("Competency 1").version(0).createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build(),
+                CompetencyDTO.builder().id(UUID.randomUUID()).title("Competency 2").version(0).createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build(),
+                CompetencyDTO.builder().id(UUID.randomUUID()).title("Competency 3").version(0).createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build(),
+                CompetencyDTO.builder().id(UUID.randomUUID()).title("Competency 4").version(0).createdDate(LocalDateTime.now()).lastModifiedDate(LocalDateTime.now()).build());
+    }
+
+    private Page<CompetencyDTO> createPageOfCompetenciesWithoutDailyDisciplines() {
+        List<CompetencyDTO> competencies = createListValidCompetencyDtoWithoutDailyDisciplines();
+        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+        return new PageImpl<>(competencies, pageable, competencies.size());
+    }
+
     private List<DailyDisciplineDTO> createListOfDailyDisciplines() {
         DailyDisciplineDTO dd1 = DailyDisciplineDTO.builder()
                 .id(UUID.randomUUID())
@@ -363,5 +391,6 @@ class CompetencyControllerTest {
 
         return List.of(dd1, dd2, dd3);
     }
+
 
 }

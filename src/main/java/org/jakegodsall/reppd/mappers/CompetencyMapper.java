@@ -6,6 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CompetencyMapper {
-    public CompetencyDTO goalToGoalDto(Competency goal);
-    public Competency goalDtoToGoal(CompetencyDTO competencyDTO);
+    public CompetencyDTO competencyToCompetencyDTO(Competency competency);
+    public Competency competencyDTOtoCompetency(CompetencyDTO competencyDTO);
 }
