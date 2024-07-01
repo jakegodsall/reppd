@@ -22,7 +22,7 @@ public class CompetencyDTO extends BaseDto {
 
     @NotBlank
     @NotNull
-    @Size(max = 255)
+    @Size(min = 1, max = 255)
     @Column(nullable = false)
     private String title;
 

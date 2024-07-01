@@ -349,6 +349,90 @@ class CompetencyControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void createDailyDisciplineByCompetencyId_dailyDisciplineTitleTooLong() throws Exception {
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
+        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+        dailyDisciplineToCreate.setTitle(String.valueOf('a').repeat(256));
+        dailyDisciplineToCreate.setCompetency(competencyDTO);
+
+        given(competencyService.getCompetencyById(any(UUID.class)))
+                .willReturn(Optional.of(competencyDTO));
+        given(dailyDisciplineService.createDailyDiscipline(any(DailyDisciplineDTO.class)))
+            .willReturn(dailyDisciplineToCreate);
+
+        String serialisedJson = objectMapper.writeValueAsString(dailyDisciplineToCreate);
+
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialisedJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createDailyDisciplineByCompetencyId_dailyDisciplineNotTitleBlank() throws Exception {
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
+        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+        dailyDisciplineToCreate.setTitle("");
+        dailyDisciplineToCreate.setCompetency(competencyDTO);
+
+        given(competencyService.getCompetencyById(any(UUID.class)))
+            .willReturn(Optional.of(competencyDTO));
+        given(dailyDisciplineService.createDailyDiscipline(any(DailyDisciplineDTO.class)))
+                .willReturn(dailyDisciplineToCreate);
+
+        String serialisedJson = objectMapper.writeValueAsString(dailyDisciplineToCreate);
+
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialisedJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createDailyDisciplineByCompetencyId_dailyDisciplineDescriptionTooLong() throws Exception {
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
+        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+        dailyDisciplineToCreate.setTitle(String.valueOf('a').repeat(1001));
+        dailyDisciplineToCreate.setCompetency(competencyDTO);
+
+        given(competencyService.getCompetencyById(any(UUID.class)))
+            .willReturn(Optional.of(competencyDTO));
+        given(dailyDisciplineService.createDailyDiscipline(any(DailyDisciplineDTO.class)))
+            .willReturn(dailyDisciplineToCreate);
+
+        String serialisedJson = objectMapper.writeValueAsString(dailyDisciplineToCreate);
+
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialisedJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createDailyDisciplineByCompetencyId_dailyDisciplineStatusNull() throws Exception {
+        CompetencyDTO competencyDTO = createValidCompetencyDtoWithoutDailyDisciplines();
+        DailyDisciplineDTO dailyDisciplineToCreate = createListOfDailyDisciplines().get(0);
+        dailyDisciplineToCreate.setStatus(null);
+        dailyDisciplineToCreate.setCompetency(competencyDTO);
+
+        given(competencyService.getCompetencyById(any(UUID.class)))
+            .willReturn(Optional.of(competencyDTO));
+        given(dailyDisciplineService.createDailyDiscipline(any(DailyDisciplineDTO.class)))
+            .willReturn(dailyDisciplineToCreate);
+
+        String serialisedJson = objectMapper.writeValueAsString(dailyDisciplineToCreate);
+
+        mockMvc.perform(post(CompetencyController.API_V1_COMPETENCY)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialisedJson))
+                .andExpect(status().isBadRequest());
+    }
+
     private CompetencyDTO createValidCompetencyDtoWithoutDailyDisciplines() {
         return CompetencyDTO.builder()
                 .id(UUID.randomUUID())
