@@ -5,13 +5,9 @@ import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriBuilder;
 
-import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -19,7 +15,7 @@ import java.util.UUID;
 public class DailyDisciplineController {
 
     // endpoints
-    public static final String API_V1_DAILY_DISCIPLINE = "/api/v1/daily-discipline";
+    public static final String API_V1_DAILY_DISCIPLINE = "/api/v1/daily-disciplines";
     public static final String API_V1_DAILY_DISCIPLINE_DETAIL = API_V1_DAILY_DISCIPLINE + "/{dailyDisciplineId}";
 
     // pagination defaults

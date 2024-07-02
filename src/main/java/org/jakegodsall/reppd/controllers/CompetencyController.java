@@ -20,9 +20,9 @@ import java.util.UUID;
 public class CompetencyController {
 
     // endpoints
-    public static final String API_V1_COMPETENCY = "/api/v1/competency";
+    public static final String API_V1_COMPETENCY = "/api/v1/competencies";
     public static final String API_V1_COMPETENCY_DETAIL = API_V1_COMPETENCY + "/{competencyId}";
-    public static final String API_V1_COMPETENCY_DAILY_DISCIPLINES = API_V1_COMPETENCY_DETAIL + "/daily-discipline";
+    public static final String API_V1_COMPETENCY_DAILY_DISCIPLINES = API_V1_COMPETENCY_DETAIL + "/daily-disciplines";
 
     // pagination defaults
     public static final int DEFAULT_PAGE_NUMBER = 1;
@@ -84,7 +84,7 @@ public class CompetencyController {
         return ResponseEntity.ok(dailyDisciplines);
     }
 
-    @PostMapping("api/v1/competency/{competencyId}/daily-discipline")
+    @PostMapping("api/v1/competencies/{competencyId}/daily-disciplines")
     public ResponseEntity<DailyDisciplineDTO> createDailyDisciplineByCompetencyId(
             @PathVariable("competencyId") UUID competencyId,
             @RequestBody DailyDisciplineDTO dailyDisciplineDTO

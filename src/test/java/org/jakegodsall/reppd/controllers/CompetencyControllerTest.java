@@ -316,7 +316,7 @@ class CompetencyControllerTest {
         String serialisedJson = objectMapper.writeValueAsString(dailyDisciplineToCreate);
         System.out.println("Request body JSON: " + serialisedJson);
 
-        MvcResult result = mockMvc.perform(post("/api/v1/competency/{competencyId}/daily-discipline", competencyDTO.getId())
+        MvcResult result = mockMvc.perform(post("/api/v1/competencies/{competencyId}/daily-disciplines", competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(serialisedJson))
@@ -326,7 +326,7 @@ class CompetencyControllerTest {
 
         System.out.println("Response JSON: " + responseContent);
 
-        mockMvc.perform(post("/api/v1/competency/{competencyId}/daily-discipline", competencyDTO.getId())
+        mockMvc.perform(post("/api/v1/competencies/{competencyId}/daily-disciplines", competencyDTO.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(serialisedJson))
