@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class BaseDto {
+public class BaseDTO {
     private UUID id;
     private Integer version;
     private LocalDateTime createdDate;

@@ -14,7 +14,7 @@ import org.jakegodsall.reppd.entities.enums.Status;
 @AllArgsConstructor
 @SuperBuilder
 @ToString
-public class DailyDisciplineDTO extends BaseDto {
+public class DailyDisciplineDTO extends BaseDTO {
 
     @NotBlank
     @NotNull
