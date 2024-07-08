@@ -2,6 +2,8 @@ package org.jakegodsall.reppd.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
+import org.jakegodsall.reppd.dtos.DailyLogDTO;
+import org.jakegodsall.reppd.entities.DailyLog;
 import org.jakegodsall.reppd.entities.enums.Status;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -170,6 +173,52 @@ class DailyDisciplineControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void getDailyLogsByDailyDisciplineId() throws Exception {
+        DailyDisciplineDTO dailyDisciplineDTO = createListOfDailyDisciplines().get(0);
+        Page<DailyLogDTO> page = createPageOfDailyLogs();
+
+        given(dailyDisciplineService.getAllDailyLogsByDailyDisciplineId(
+                dailyDisciplineDTO.getId(),
+                DEFAULT_PAGE_NUMBER,
+                DEFAULT_PAGE_SIZE))
+                .willReturn(page);
+
+        mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE_DAILY_LOGS, dailyDisciplineDTO.getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", hasSize(3)));
+    }
+
+    @Test
+    void getDailyLogsByDailyDisciplineId_dailyDisciplineIdNotFound() throws Exception {
+        UUID dailyDisciplineId = UUID.randomUUID();
+
+        given(dailyDisciplineService.getAllDailyLogsByDailyDisciplineId(
+                dailyDisciplineId, null, null))
+                .willReturn(null);
+
+        mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE_DAILY_LOGS, dailyDisciplineId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getDailyLogsByDailyDisciplineId_emptyPage() throws Exception {
+        UUID dailyDisciplineId = UUID.randomUUID();
+        Page<DailyLogDTO> dailyDisciplines = Page.empty();
+
+        given(dailyDisciplineService.getAllDailyLogsByDailyDisciplineId(
+                dailyDisciplineId, null, null)).willReturn(dailyDisciplines);
+
+        mockMvc.perform(get(DailyDisciplineController.API_V1_DAILY_DISCIPLINE_DAILY_LOGS, dailyDisciplineId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", hasSize(0)));
+    }
+
     private List<DailyDisciplineDTO> createListOfDailyDisciplines() {
         DailyDisciplineDTO dd1 = DailyDisciplineDTO.builder()
                 .id(UUID.randomUUID())
@@ -201,5 +250,30 @@ class DailyDisciplineControllerTest {
     private Page<DailyDisciplineDTO> createPageOfDailyDisciplines() {
         Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
         return new PageImpl<>(createListOfDailyDisciplines(), pageable, 100);
+    }
+
+    private List<DailyLogDTO> createListOfDailyLogs() {
+        DailyLogDTO dl1 = DailyLogDTO.builder()
+                .date(LocalDateTime.now())
+                .value(1L)
+                .build();
+
+        DailyLogDTO dl2 = DailyLogDTO.builder()
+                .date(LocalDateTime.now())
+                .value(2L)
+                .build();
+
+        DailyLogDTO dl3 = DailyLogDTO.builder()
+                .date(LocalDateTime.now())
+                .value(3L)
+                .build();
+
+        return List.of(dl1, dl2, dl3);
+    }
+
+    private Page<DailyLogDTO> createPageOfDailyLogs() {
+        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+        return new PageImpl<>(createListOfDailyLogs(), pageable, 100);
+
     }
 }

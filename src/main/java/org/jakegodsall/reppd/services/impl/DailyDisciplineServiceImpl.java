@@ -1,11 +1,11 @@
 package org.jakegodsall.reppd.services.impl;
 
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
+import org.jakegodsall.reppd.dtos.DailyLogDTO;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,17 +24,22 @@ public class DailyDisciplineServiceImpl implements DailyDisciplineService {
 
 
     @Override
-    public Optional<DailyDisciplineDTO> getDailyDisciplineById(UUID id) {
+    public Optional<DailyDisciplineDTO> getDailyDisciplineById(UUID dailyDisciplineId) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<DailyDisciplineDTO> updateDailyDisciplineById(UUID id, DailyDisciplineDTO dailyDisciplineDTO) {
+    public Optional<DailyDisciplineDTO> updateDailyDisciplineById(UUID dailyDisciplineId, DailyDisciplineDTO dailyDisciplineDTO) {
         return Optional.empty();
     }
 
     @Override
-    public boolean deleteDailyDisciplineById(UUID id) {
+    public boolean deleteDailyDisciplineById(UUID dailyDisciplineId) {
         return false;
+    }
+
+    @Override
+    public Page<DailyLogDTO> getAllDailyLogsByDailyDisciplineId(UUID dailyDisciplineId, Integer pageNumber, Integer pageSize) {
+        return null;
     }
 }
