@@ -3,10 +3,12 @@ package org.jakegodsall.reppd.services.impl;
 import org.jakegodsall.reppd.dtos.DailyLogDTO;
 import org.jakegodsall.reppd.services.DailyLogService;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class DailyLogServiceImpl implements DailyLogService {
     @Override
     public Page<DailyLogDTO> getAllDailyLogs(Integer pageNumber, Integer pageSize) {

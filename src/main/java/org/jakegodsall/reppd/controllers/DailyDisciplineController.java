@@ -2,6 +2,7 @@ package org.jakegodsall.reppd.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.jakegodsall.reppd.dtos.DailyDisciplineDTO;
+import org.jakegodsall.reppd.dtos.DailyLogDTO;
 import org.jakegodsall.reppd.exceptions.NotFoundException;
 import org.jakegodsall.reppd.services.DailyDisciplineService;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ public class DailyDisciplineController {
     // endpoints
     public static final String API_V1_DAILY_DISCIPLINE = "/api/v1/daily-disciplines";
     public static final String API_V1_DAILY_DISCIPLINE_DETAIL = API_V1_DAILY_DISCIPLINE + "/{dailyDisciplineId}";
+    public static final String API_V1_DAILY_DISCIPLINE_DAILY_LOGS = API_V1_DAILY_DISCIPLINE_DETAIL + "/daily-logs";
 
     // pagination defaults
     public static final int DEFAULT_PAGE_NUMBER = 1;
@@ -32,11 +34,6 @@ public class DailyDisciplineController {
         Page<DailyDisciplineDTO> ddPage = dailyDisciplineService.getAllDailyDisciplines(pageNumber, pageSize);
         return ResponseEntity.ok(ddPage);
     }
-
-//    @PostMapping(API_V1_DAILY_DISCIPLINE)
-//    public ResponseEntity<DailyDisciplineDTO> createDailyDiscipline(DailyDisciplineDTO dailyDisciplineDTO) {
-//        return null;
-//    }
 
     @GetMapping(API_V1_DAILY_DISCIPLINE_DETAIL)
     public ResponseEntity<DailyDisciplineDTO> getDailyDisciplineById(@PathVariable UUID dailyDisciplineId) {
@@ -63,5 +60,10 @@ public class DailyDisciplineController {
         }
         dailyDisciplineService.deleteDailyDisciplineById(dailyDisciplineId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(API_V1_DAILY_DISCIPLINE_DAILY_LOGS)
+    public ResponseEntity<Page<DailyLogDTO>> getDailyLogsByDailyDisciplineId(@PathVariable UUID dailyDisciplineId) {
+        return null;
     }
 }
