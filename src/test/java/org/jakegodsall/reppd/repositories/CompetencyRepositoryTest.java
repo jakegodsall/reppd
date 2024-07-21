@@ -19,64 +19,64 @@ class CompetencyRepositoryTest {
     private CompetencyRepository competencyRepository;
 
     @Test
-    void saveGoal() {
-        Competency savedGoal = competencyRepository.save(createValidCompetencyWithoutDailyDisciplines());
-        assertThat(savedGoal.getId()).isNotNull();
+    void createCompetency() {
+        Competency createdCompetency = competencyRepository.save(createValidCompetencyWithoutDailyDisciplines());
+        assertThat(createdCompetency.getId()).isNotNull();
     }
 
     // Validation Tests
 
     @Test
-    void saveGoalNullTitle() {
-        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
-        goalToSave.setTitle(null);
+    void createCompetency_nullTitle() {
+        Competency createdCompetency = createValidCompetencyWithoutDailyDisciplines();
+        createdCompetency.setTitle(null);
 
         assertThrows(ConstraintViolationException.class, () -> {
-            competencyRepository.save(goalToSave);
+            competencyRepository.save(createdCompetency);
             competencyRepository.flush();
         });
     }
 
     @Test
-    void saveGoalBlankTitle() {
-        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
-        goalToSave.setTitle("");
+    void createCompetency_blankTitle() {
+        Competency createdCompetency = createValidCompetencyWithoutDailyDisciplines();
+        createdCompetency.setTitle("");
 
         assertThrows(ConstraintViolationException.class, () -> {
-            competencyRepository.save(goalToSave);
+            competencyRepository.save(createdCompetency);
             competencyRepository.flush();
         });
     }
 
     @Test
-    void saveGoalTitleTooLong() {
-        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
-        goalToSave.setTitle(String.valueOf('a').repeat(266));
+    void createCompetency_titleTooLong() {
+        Competency createdCompetency = createValidCompetencyWithoutDailyDisciplines();
+        createdCompetency.setTitle(String.valueOf('a').repeat(266));
 
         assertThrows(ConstraintViolationException.class, () -> {
-            competencyRepository.save(goalToSave);
+            competencyRepository.save(createdCompetency);
             competencyRepository.flush();
         });
     }
 
     @Test
-    void saveGoalDescriptionTooLong() {
-        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
-        goalToSave.setDescription(String.valueOf('a').repeat(1001));
+    void createCompetency_descriptionTooLong() {
+        Competency createdCompetency = createValidCompetencyWithoutDailyDisciplines();
+        createdCompetency.setDescription(String.valueOf('a').repeat(1001));
 
         assertThrows(ConstraintViolationException.class, () -> {
-            competencyRepository.save(goalToSave);
+            competencyRepository.save(createdCompetency);
             competencyRepository.flush();
         });
     }
 
     @Test
-    void saveGoalNullStatus() {
-        Competency goalToSave = createValidCompetencyWithoutDailyDisciplines();
-        goalToSave.setStatus(null);
+    void createCompetency_nullStatus() {
+        Competency createdCompetency = createValidCompetencyWithoutDailyDisciplines();
+        createdCompetency.setStatus(null);
 
         assertThrows(ConstraintViolationException.class, () -> {
-            competencyRepository.save(goalToSave);
+            competencyRepository.save(createdCompetency);
             competencyRepository.flush();
         });
     }
