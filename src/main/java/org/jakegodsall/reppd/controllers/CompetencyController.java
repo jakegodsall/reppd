@@ -23,12 +23,12 @@ import java.util.UUID;
 @RestController
 public class CompetencyController {
 
-    // endpoints
+    // Endpoints
     public static final String API_V1_COMPETENCY = "/api/v1/competencies";
     public static final String API_V1_COMPETENCY_DETAIL = API_V1_COMPETENCY + "/{competencyId}";
     public static final String API_V1_COMPETENCY_DAILY_DISCIPLINES = API_V1_COMPETENCY_DETAIL + "/daily-disciplines";
 
-    // pagination defaults
+    // Pagination Defaults
     public static final int DEFAULT_PAGE_NUMBER = 1;
     public static final int DEFAULT_PAGE_SIZE = 25;
 
