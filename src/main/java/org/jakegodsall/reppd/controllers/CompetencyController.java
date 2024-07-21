@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+
+/**
+ * REST controller for managing competencies and their related daily disciplines.
+ */
 @RequiredArgsConstructor
 @RestController
 public class CompetencyController {
@@ -31,6 +35,13 @@ public class CompetencyController {
     private final CompetencyService competencyService;
     private final DailyDisciplineService dailyDisciplineService;
 
+    /**
+     * Retrieves all competencies with pagination.
+     *
+     * @param pageNumber the page number to retrieve, defaults to 1
+     * @param pageSize the size of the page, defaults to 25
+     * @return a ResponseEntity containing a page of CompetencyDTOs
+     */
     @GetMapping(API_V1_COMPETENCY)
     public ResponseEntity<Page<CompetencyDTO>> getAllCompetencies(
             @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
@@ -40,6 +51,12 @@ public class CompetencyController {
         return ResponseEntity.ok(competencies);
     }
 
+    /**
+     * Creates a new competency.
+     *
+     * @param competencyDTO the competency data to create
+     * @return a ResponseEntity containing the created CompetencyDTO and a location header
+     */
     @PostMapping(API_V1_COMPETENCY)
     public ResponseEntity<CompetencyDTO> createCompetency(
             @Valid @RequestBody CompetencyDTO competencyDTO
@@ -50,12 +67,27 @@ public class CompetencyController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves a competency by its ID.
+     *
+     * @param competencyId the ID of the competency to retrieve
+     * @return a ResponseEntity containing the CompetencyDTO
+     * @throws NotFoundException if the competency is not found
+     */
     @GetMapping(API_V1_COMPETENCY_DETAIL)
     public ResponseEntity<CompetencyDTO> getCompetencyById(@PathVariable("competencyId") UUID competencyId) {
         CompetencyDTO competencyDTO = competencyService.getCompetencyById(competencyId).orElseThrow(NotFoundException::new);
         return ResponseEntity.ok(competencyDTO);
     }
 
+    /**
+     * Updates a competency by its ID.
+     *
+     * @param competencyId the ID of the competency to update
+     * @param competencyDTO the updated competency data
+     * @return a ResponseEntity containing the updated CompetencyDTO
+     * @throws NotFoundException if the competency is not found
+     */
     @PutMapping(API_V1_COMPETENCY_DETAIL)
     public ResponseEntity<CompetencyDTO> updateCompetencyById(
             @PathVariable("competencyId") UUID competencyId,
@@ -66,6 +98,13 @@ public class CompetencyController {
         return ResponseEntity.ok(updatedCompetencyDTO);
     }
 
+    /**
+     * Deletes a competency by its ID.
+     *
+     * @param competencyId the ID of the competency to delete
+     * @return a ResponseEntity with no content status
+     * @throws NotFoundException if the competency is not found
+     */
     @DeleteMapping(API_V1_COMPETENCY_DETAIL)
     public ResponseEntity<Void> deleteCompetencyById(@PathVariable("competencyId") UUID competencyId) {
         if (!competencyService.deleteCompetencyById(competencyId)) {
@@ -74,6 +113,12 @@ public class CompetencyController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Retrieves all daily disciplines associated with a specific competency.
+     *
+     * @param competencyId the ID of the competency
+     * @return a ResponseEntity containing a page of DailyDisciplineDTOs
+     */
     @GetMapping(API_V1_COMPETENCY_DAILY_DISCIPLINES)
     public ResponseEntity<Page<DailyDisciplineDTO>> getAllDailyDisciplinesByCompetencyId(@PathVariable("competencyId") UUID competencyId) {
         Page<DailyDisciplineDTO> dailyDisciplines = competencyService.getAllDailyDisciplinesByCompetencyId(
@@ -84,6 +129,14 @@ public class CompetencyController {
         return ResponseEntity.ok(dailyDisciplines);
     }
 
+    /**
+     * Creates a new daily discipline associated with a specific competency.
+     *
+     * @param competencyId the ID of the competency
+     * @param dailyDisciplineDTO the daily discipline data to create
+     * @return a ResponseEntity containing the created DailyDisciplineDTO and a created status
+     * @throws NotFoundException if the competency is not found
+     */
     @PostMapping("api/v1/competencies/{competencyId}/daily-disciplines")
     public ResponseEntity<DailyDisciplineDTO> createDailyDisciplineByCompetencyId(
             @PathVariable("competencyId") UUID competencyId,
