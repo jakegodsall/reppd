@@ -1,0 +1,60 @@
+services:
+  db:
+    image: mysql:8.0.32
+    ports:
+      - "3306:3306"
+    volumes:
+      - dev_db_store:/var/lib/mysql
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dev
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - reppd_network
+  nginx:
+    depends_on:
+      - db
+    build:
+      context: ./
+      dockerfile: ./build/docker/nginx/Dockerfile
+    deploy:
+      replicas: 1
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - reppd_network
+    links:
+      - php
+  php:
+    depends_on:
+      - db
+    build:
+      context: ./
+      dockerfile: ./build/docker/php/Dockerfile
+    user: "1000:1000"
+    environment:
+      - npm_config_cache=/var/www/html/.npm
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - reppd_network
+    ports:
+      - "5173:5173"
+
+networks:
+  reppd_network:
+volumes:
+  dev_db_store:
