@@ -2,7 +2,7 @@ FROM nginx:alpine AS prod
 
 WORKDIR /var/www/html
 
-ADD build/configs prod-default.conf /etc/nginx/conf.d/default.conf
+ADD build/configs/prod-default.conf /etc/nginx/conf.d/default.conf
 
 VOLUME ["/var/www/html"]
 
