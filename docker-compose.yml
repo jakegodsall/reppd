@@ -14,7 +14,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     networks:
-      - reppd_network
+      - app_network
   nginx:
     depends_on:
       - db
@@ -29,7 +29,7 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      - reppd_network
+      - app_network
     links:
       - php
   php:
@@ -50,11 +50,11 @@ services:
     volumes:
       - ./src:/var/www/html
     networks:
-      - reppd_network
+      - app_network
     ports:
       - "5173:5173"
 
 networks:
-  reppd_network:
+  app_network:
 volumes:
   dev_db_store:
